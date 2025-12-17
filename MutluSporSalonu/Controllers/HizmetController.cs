@@ -64,7 +64,7 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SporSalonuID);
+            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
@@ -81,7 +81,7 @@ namespace MutluSporSalonu.Controllers
             {
                 return NotFound();
             }
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SporSalonuID);
+            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
@@ -117,7 +117,7 @@ namespace MutluSporSalonu.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SporSalonuID);
+            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 

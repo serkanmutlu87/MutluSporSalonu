@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MutluSporSalonu.Models
 {
@@ -16,6 +17,7 @@ namespace MutluSporSalonu.Models
         [Display(Name = "Hizmet Süresi (Dakika)")]
         public int HizmetSureDakika { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         [Required(ErrorMessage = "Ücret zorunludur.")]
         [Display(Name = "Hizmet Ücreti (₺)")]
         public decimal HizmetUcret { get; set; }
@@ -26,7 +28,7 @@ namespace MutluSporSalonu.Models
 
         // İlişkiler
         [Display(Name = "Spor Salonları")]
-        public int SporSalonuID { get; set; }
+        public int SalonID { get; set; }
         public SporSalonu? SporSalonu { get; set; }
 
         [Display(Name = "Bu Hizmeti Verebilen Antrenörler")]

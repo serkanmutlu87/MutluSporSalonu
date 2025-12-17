@@ -33,7 +33,7 @@ namespace MutluSporSalonu.Controllers
             }
 
             var sporSalonu = await _context.Salonlar
-                .FirstOrDefaultAsync(m => m.SaloNID == id);
+                .FirstOrDefaultAsync(m => m.SalonID == id);
             if (sporSalonu == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@ namespace MutluSporSalonu.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("SaloNID,SalonAdi,SalonAdres,SalonAcilisSaati,SalonKapanisSaati,SalonAciklama")] SporSalonu sporSalonu)
         {
-            if (id != sporSalonu.SaloNID)
+            if (id != sporSalonu.SalonID)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace MutluSporSalonu.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SporSalonuExists(sporSalonu.SaloNID))
+                    if (!SporSalonuExists(sporSalonu.SalonID))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace MutluSporSalonu.Controllers
             }
 
             var sporSalonu = await _context.Salonlar
-                .FirstOrDefaultAsync(m => m.SaloNID == id);
+                .FirstOrDefaultAsync(m => m.SalonID == id);
             if (sporSalonu == null)
             {
                 return NotFound();
@@ -150,7 +150,7 @@ namespace MutluSporSalonu.Controllers
 
         private bool SporSalonuExists(int id)
         {
-            return _context.Salonlar.Any(e => e.SaloNID == id);
+            return _context.Salonlar.Any(e => e.SalonID == id);
         }
     }
 }

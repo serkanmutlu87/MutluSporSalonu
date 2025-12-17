@@ -21,8 +21,11 @@ namespace MutluSporSalonu.Controllers
         // GET: Antrenor
         public async Task<IActionResult> Index()
         {
-            var dBContext = _context.Antrenorler.Include(a => a.SporSalonu);
-            return View(await dBContext.ToListAsync());
+            var antrenorler = await _context.Antrenorler
+                .Include(a => a.SporSalonu)
+                .ToListAsync();
+
+            return View(antrenorler);
         }
 
         // GET: Antrenor/Details/5
@@ -47,7 +50,7 @@ namespace MutluSporSalonu.Controllers
         // GET: Antrenor/Create
         public IActionResult Create()
         {
-            ViewData["SporSalonuId"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi");
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi");
             return View();
         }
 
@@ -56,7 +59,7 @@ namespace MutluSporSalonu.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AntrenorID,AntrenorAdSoyad,AntrenorUzmanlikAlanlari,AntrenorTelefon,AntrenorEposta,AntrenorMusaitlikBaslangic,AntrenorMusaitlikBitis,SporSalonuId")] Antrenor antrenor)
+        public async Task<IActionResult> Create([Bind("AntrenorID,AntrenorAdSoyad,AntrenorUzmanlikAlanlari,AntrenorTelefon,AntrenorEposta,AntrenorMusaitlikBaslangic,AntrenorMusaitlikBitis,SalonID")] Antrenor antrenor)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +67,7 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SporSalonuId"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", antrenor.SporSalonuId);
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
             return View(antrenor);
         }
 
@@ -81,7 +84,7 @@ namespace MutluSporSalonu.Controllers
             {
                 return NotFound();
             }
-            ViewData["SporSalonuId"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", antrenor.SporSalonuId);
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
             return View(antrenor);
         }
 
@@ -90,7 +93,7 @@ namespace MutluSporSalonu.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AntrenorID,AntrenorAdSoyad,AntrenorUzmanlikAlanlari,AntrenorTelefon,AntrenorEposta,AntrenorMusaitlikBaslangic,AntrenorMusaitlikBitis,SporSalonuId")] Antrenor antrenor)
+        public async Task<IActionResult> Edit(int id, [Bind("AntrenorID,AntrenorAdSoyad,AntrenorUzmanlikAlanlari,AntrenorTelefon,AntrenorEposta,AntrenorMusaitlikBaslangic,AntrenorMusaitlikBitis,SalonID")] Antrenor antrenor)
         {
             if (id != antrenor.AntrenorID)
             {
@@ -117,7 +120,7 @@ namespace MutluSporSalonu.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SporSalonuId"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", antrenor.SporSalonuId);
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
             return View(antrenor);
         }
 

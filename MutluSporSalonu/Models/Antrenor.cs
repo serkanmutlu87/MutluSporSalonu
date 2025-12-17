@@ -37,7 +37,7 @@ namespace MutluSporSalonu.Models
 
         // İlişkiler
         [Display(Name = "Bağlı Olduğu Spor Salonu")]
-        public int SporSalonuId { get; set; }
+        public int SalonID { get; set; }
         public SporSalonu? SporSalonu { get; set; }
 
         [Display(Name = "Verebildiği Hizmetler")]

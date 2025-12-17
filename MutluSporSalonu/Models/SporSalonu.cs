@@ -5,7 +5,7 @@ namespace MutluSporSalonu.Models
     public class SporSalonu
     {
         [Key]
-        public int SaloNID { get; set; }
+        public int SalonID { get; set; }
 
         [Required(ErrorMessage = "Salon adı zorunludur.")]
         [StringLength(100)]
@@ -27,7 +27,7 @@ namespace MutluSporSalonu.Models
 
         [StringLength(500)]
         [Display(Name = "Açıklama")]
-        public string? SalonAciklama { get; set; }
+        public string SalonAciklama { get; set; }
 
         // İlişkiler
         [Display(Name = "Hizmetler")]

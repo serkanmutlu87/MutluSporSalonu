@@ -4,6 +4,7 @@ namespace MutluSporSalonu.Models
 {
     public class DBContext : DbContext
     {
+        public DBContext(DbContextOptions<DBContext> options) : base(options) { }
         public DbSet<Antrenor> Antrenorler { get; set; }
         public DbSet<Hizmet> Hizmetler { get; set; }
         public DbSet<Randevu> Randevular { get; set; }

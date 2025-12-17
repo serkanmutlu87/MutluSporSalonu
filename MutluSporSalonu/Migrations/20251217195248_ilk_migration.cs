@@ -15,7 +15,7 @@ namespace MutluSporSalonu.Migrations
                 name: "Salonlar",
                 columns: table => new
                 {
-                    SaloNID = table.Column<int>(type: "int", nullable: false)
+                    SalonID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SalonAdi = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     SalonAdres = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
@@ -25,7 +25,7 @@ namespace MutluSporSalonu.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Salonlar", x => x.SaloNID);
+                    table.PrimaryKey("PK_Salonlar", x => x.SalonID);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,17 +58,17 @@ namespace MutluSporSalonu.Migrations
                     AntrenorEposta = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AntrenorMusaitlikBaslangic = table.Column<TimeSpan>(type: "time", nullable: false),
                     AntrenorMusaitlikBitis = table.Column<TimeSpan>(type: "time", nullable: false),
-                    SporSalonuId = table.Column<int>(type: "int", nullable: false)
+                    SalonId = table.Column<int>(type: "int", nullable: false),
+                    SporSalonuSalonID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Antrenorler", x => x.AntrenorID);
                     table.ForeignKey(
-                        name: "FK_Antrenorler_Salonlar_SporSalonuId",
-                        column: x => x.SporSalonuId,
+                        name: "FK_Antrenorler_Salonlar_SporSalonuSalonID",
+                        column: x => x.SporSalonuSalonID,
                         principalTable: "Salonlar",
-                        principalColumn: "SaloNID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SalonID");
                 });
 
             migrationBuilder.CreateTable(
@@ -81,17 +81,17 @@ namespace MutluSporSalonu.Migrations
                     HizmetSureDakika = table.Column<int>(type: "int", nullable: false),
                     HizmetUcret = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     HizmetAciklama = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    SporSalonuID = table.Column<int>(type: "int", nullable: false)
+                    SalonID = table.Column<int>(type: "int", nullable: false),
+                    SporSalonuSalonID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Hizmetler", x => x.HizmetID);
                     table.ForeignKey(
-                        name: "FK_Hizmetler_Salonlar_SporSalonuID",
-                        column: x => x.SporSalonuID,
+                        name: "FK_Hizmetler_Salonlar_SporSalonuSalonID",
+                        column: x => x.SporSalonuSalonID,
                         principalTable: "Salonlar",
-                        principalColumn: "SaloNID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SalonID");
                 });
 
             migrationBuilder.CreateTable(
@@ -128,7 +128,7 @@ namespace MutluSporSalonu.Migrations
                     AntrenorID = table.Column<int>(type: "int", nullable: false),
                     HizmetID = table.Column<int>(type: "int", nullable: false),
                     SalonID = table.Column<int>(type: "int", nullable: false),
-                    SporSalonuSaloNID = table.Column<int>(type: "int", nullable: true),
+                    SporSalonuSalonID = table.Column<int>(type: "int", nullable: true),
                     RandevuTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RandevuBaslangicSaati = table.Column<TimeSpan>(type: "time", nullable: false),
                     RandevuBitisSaati = table.Column<TimeSpan>(type: "time", nullable: false),
@@ -153,10 +153,10 @@ namespace MutluSporSalonu.Migrations
                         principalColumn: "HizmetID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Randevular_Salonlar_SporSalonuSaloNID",
-                        column: x => x.SporSalonuSaloNID,
+                        name: "FK_Randevular_Salonlar_SporSalonuSalonID",
+                        column: x => x.SporSalonuSalonID,
                         principalTable: "Salonlar",
-                        principalColumn: "SaloNID");
+                        principalColumn: "SalonID");
                     table.ForeignKey(
                         name: "FK_Randevular_Uyeler_UyeID",
                         column: x => x.UyeID,
@@ -171,14 +171,14 @@ namespace MutluSporSalonu.Migrations
                 column: "HizmetlerHizmetID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Antrenorler_SporSalonuId",
+                name: "IX_Antrenorler_SporSalonuSalonID",
                 table: "Antrenorler",
-                column: "SporSalonuId");
+                column: "SporSalonuSalonID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hizmetler_SporSalonuID",
+                name: "IX_Hizmetler_SporSalonuSalonID",
                 table: "Hizmetler",
-                column: "SporSalonuID");
+                column: "SporSalonuSalonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Randevular_AntrenorID",
@@ -191,9 +191,9 @@ namespace MutluSporSalonu.Migrations
                 column: "HizmetID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Randevular_SporSalonuSaloNID",
+                name: "IX_Randevular_SporSalonuSalonID",
                 table: "Randevular",
-                column: "SporSalonuSaloNID");
+                column: "SporSalonuSalonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Randevular_UyeID",

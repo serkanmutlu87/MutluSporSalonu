@@ -12,7 +12,7 @@ using MutluSporSalonu.Models;
 namespace MutluSporSalonu.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20251217122736_ilk_migration")]
+    [Migration("20251217195248_ilk_migration")]
     partial class ilk_migration
     {
         /// <inheritdoc />
@@ -73,12 +73,15 @@ namespace MutluSporSalonu.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("SporSalonuId")
+                    b.Property<int>("SalonId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SporSalonuSalonID")
                         .HasColumnType("int");
 
                     b.HasKey("AntrenorID");
 
-                    b.HasIndex("SporSalonuId");
+                    b.HasIndex("SporSalonuSalonID");
 
                     b.ToTable("Antrenorler");
                 });
@@ -106,12 +109,15 @@ namespace MutluSporSalonu.Migrations
                     b.Property<decimal>("HizmetUcret")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SporSalonuID")
+                    b.Property<int>("SalonID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SporSalonuSalonID")
                         .HasColumnType("int");
 
                     b.HasKey("HizmetID");
 
-                    b.HasIndex("SporSalonuID");
+                    b.HasIndex("SporSalonuSalonID");
 
                     b.ToTable("Hizmetler");
                 });
@@ -155,7 +161,7 @@ namespace MutluSporSalonu.Migrations
                     b.Property<int>("SalonID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SporSalonuSaloNID")
+                    b.Property<int?>("SporSalonuSalonID")
                         .HasColumnType("int");
 
                     b.Property<int>("UyeID")
@@ -167,7 +173,7 @@ namespace MutluSporSalonu.Migrations
 
                     b.HasIndex("HizmetID");
 
-                    b.HasIndex("SporSalonuSaloNID");
+                    b.HasIndex("SporSalonuSalonID");
 
                     b.HasIndex("UyeID");
 
@@ -176,11 +182,11 @@ namespace MutluSporSalonu.Migrations
 
             modelBuilder.Entity("MutluSporSalonu.Models.SporSalonu", b =>
                 {
-                    b.Property<int>("SaloNID")
+                    b.Property<int>("SalonID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaloNID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalonID"));
 
                     b.Property<string>("SalonAciklama")
                         .HasMaxLength(500)
@@ -202,7 +208,7 @@ namespace MutluSporSalonu.Migrations
                     b.Property<TimeSpan>("SalonKapanisSaati")
                         .HasColumnType("time");
 
-                    b.HasKey("SaloNID");
+                    b.HasKey("SalonID");
 
                     b.ToTable("Salonlar");
                 });
@@ -265,9 +271,7 @@ namespace MutluSporSalonu.Migrations
                 {
                     b.HasOne("MutluSporSalonu.Models.SporSalonu", "SporSalonu")
                         .WithMany("Antrenorler")
-                        .HasForeignKey("SporSalonuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SporSalonuSalonID");
 
                     b.Navigation("SporSalonu");
                 });
@@ -276,9 +280,7 @@ namespace MutluSporSalonu.Migrations
                 {
                     b.HasOne("MutluSporSalonu.Models.SporSalonu", "SporSalonu")
                         .WithMany("Hizmetler")
-                        .HasForeignKey("SporSalonuID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SporSalonuSalonID");
 
                     b.Navigation("SporSalonu");
                 });
@@ -299,7 +301,7 @@ namespace MutluSporSalonu.Migrations
 
                     b.HasOne("MutluSporSalonu.Models.SporSalonu", "SporSalonu")
                         .WithMany()
-                        .HasForeignKey("SporSalonuSaloNID");
+                        .HasForeignKey("SporSalonuSalonID");
 
                     b.HasOne("MutluSporSalonu.Models.Uye", "Uye")
                         .WithMany("Randevular")
