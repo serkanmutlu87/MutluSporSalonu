@@ -33,6 +33,7 @@ namespace MutluSporSalonu.Controllers
             }
 
             var uye = await _context.Uyeler
+                .Include(m => m.Randevular)
                 .FirstOrDefaultAsync(m => m.UyeID == id);
             if (uye == null)
             {
@@ -45,7 +46,12 @@ namespace MutluSporSalonu.Controllers
         // GET: Uye/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new Uye
+            { 
+                KayitTarihi = DateTime.Now,
+                Rol = "Uye"
+            };
+            return View(model);
         }
 
         // POST: Uye/Create
@@ -55,13 +61,28 @@ namespace MutluSporSalonu.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UyeID,UyeAdSoyad,UyeEposta,UyeSifre,UyeTelefon,KayitTarihi,Rol")] Uye uye)
         {
-            if (ModelState.IsValid)
+            if (await _context.Uyeler.AnyAsync(u => u.UyeEposta == uye.UyeEposta))
             {
-                _context.Add(uye);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("Eposta", "Bu e-posta adresi ile zaten bir hesap bulunmaktadır.");
             }
-            return View(uye);
+
+            if (!ModelState.IsValid)
+            {
+                return View(uye);
+            }
+
+            // Varsayılan rol atanmadıysa Uye yap
+            if (string.IsNullOrWhiteSpace(uye.Rol))
+                uye.Rol = "Uye";
+
+            _context.Uyeler.Add(uye);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(KayitBasarili));
+        }
+        public IActionResult KayitBasarili()
+        {
+            return View();
         }
 
         // GET: Uye/Edit/5

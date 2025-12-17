@@ -51,6 +51,7 @@ namespace MutluSporSalonu.Controllers
         public IActionResult Create()
         {
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi");
+            ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View();
         }
 
@@ -68,6 +69,7 @@ namespace MutluSporSalonu.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
+            ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View(antrenor);
         }
 
@@ -85,6 +87,7 @@ namespace MutluSporSalonu.Controllers
                 return NotFound();
             }
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
+            ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View(antrenor);
         }
 
@@ -121,6 +124,7 @@ namespace MutluSporSalonu.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
+            ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View(antrenor);
         }
 
@@ -134,6 +138,7 @@ namespace MutluSporSalonu.Controllers
 
             var antrenor = await _context.Antrenorler
                 .Include(a => a.SporSalonu)
+                .Include(a => a.Hizmetler)
                 .FirstOrDefaultAsync(m => m.AntrenorID == id);
             if (antrenor == null)
             {

@@ -33,7 +33,10 @@ namespace MutluSporSalonu.Controllers
             }
 
             var sporSalonu = await _context.Salonlar
-                .FirstOrDefaultAsync(m => m.SalonID == id);
+                .Include(s => s.Hizmetler)
+                .Include(s => s.Antrenorler)
+                .FirstOrDefaultAsync(s => s.SalonID == id);
+
             if (sporSalonu == null)
             {
                 return NotFound();

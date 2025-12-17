@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MutluSporSalonu.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MutluSporSalonu.Controllers
 {
+    [Authorize]
     public class HizmetController : Controller
     {
         private readonly DBContext _context;
@@ -47,7 +49,7 @@ namespace MutluSporSalonu.Controllers
         // GET: Hizmet/Create
         public IActionResult Create()
         {
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi");
+            ViewData["SalonID"] = new SelectList(_context.Salonlar.ToList(), "SalonID", "SalonAdi");
             return View();
         }
 
@@ -56,7 +58,7 @@ namespace MutluSporSalonu.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HizmetID,HizmetAdi,HizmetSureDakika,HizmetUcret,HizmetAciklama,SporSalonuID")] Hizmet hizmet)
+        public async Task<IActionResult> Create([Bind("HizmetID,HizmetAdi,HizmetSureDakika,HizmetUcret,HizmetAciklama,SalonID")] Hizmet hizmet)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +66,7 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SalonID);
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
@@ -81,7 +83,7 @@ namespace MutluSporSalonu.Controllers
             {
                 return NotFound();
             }
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SalonID);
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
@@ -90,7 +92,7 @@ namespace MutluSporSalonu.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("HizmetID,HizmetAdi,HizmetSureDakika,HizmetUcret,HizmetAciklama,SporSalonuID")] Hizmet hizmet)
+        public async Task<IActionResult> Edit(int id, [Bind("HizmetID,HizmetAdi,HizmetSureDakika,HizmetUcret,HizmetAciklama,SalonID")] Hizmet hizmet)
         {
             if (id != hizmet.HizmetID)
             {
@@ -117,7 +119,7 @@ namespace MutluSporSalonu.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SporSalonuID"] = new SelectList(_context.Salonlar, "SaloNID", "SalonAdi", hizmet.SalonID);
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
