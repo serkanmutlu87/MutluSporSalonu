@@ -1,0 +1,95 @@
+﻿@model IEnumerable<MutluSporSalonu.Models.Randevu>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Uye)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Antrenor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hizmet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalonID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuTarihi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuBaslangicSaati)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuBitisSaati)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuUcret)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuOnaylandiMi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuAciklama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RandevuOlusturulmaTarihi)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Uye.Rol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Antrenor.AntrenorAdSoyad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hizmet.HizmetAdi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalonID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuTarihi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuBaslangicSaati)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuBitisSaati)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuUcret)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuOnaylandiMi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuAciklama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RandevuOlusturulmaTarihi)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RandevuID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RandevuID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RandevuID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

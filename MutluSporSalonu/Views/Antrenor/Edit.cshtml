@@ -1,0 +1,64 @@
+﻿@model MutluSporSalonu.Models.Antrenor
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Antrenor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AntrenorID" />
+            <div class="form-group">
+                <label asp-for="AntrenorAdSoyad" class="control-label"></label>
+                <input asp-for="AntrenorAdSoyad" class="form-control" />
+                <span asp-validation-for="AntrenorAdSoyad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AntrenorUzmanlikAlanlari" class="control-label"></label>
+                <input asp-for="AntrenorUzmanlikAlanlari" class="form-control" />
+                <span asp-validation-for="AntrenorUzmanlikAlanlari" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AntrenorTelefon" class="control-label"></label>
+                <input asp-for="AntrenorTelefon" class="form-control" />
+                <span asp-validation-for="AntrenorTelefon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AntrenorEposta" class="control-label"></label>
+                <input asp-for="AntrenorEposta" class="form-control" />
+                <span asp-validation-for="AntrenorEposta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AntrenorMusaitlikBaslangic" class="control-label"></label>
+                <input asp-for="AntrenorMusaitlikBaslangic" class="form-control" />
+                <span asp-validation-for="AntrenorMusaitlikBaslangic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AntrenorMusaitlikBitis" class="control-label"></label>
+                <input asp-for="AntrenorMusaitlikBitis" class="form-control" />
+                <span asp-validation-for="AntrenorMusaitlikBitis" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SporSalonuId" class="control-label"></label>
+                <select asp-for="SporSalonuId" class="form-control" asp-items="ViewBag.SporSalonuId"></select>
+                <span asp-validation-for="SporSalonuId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

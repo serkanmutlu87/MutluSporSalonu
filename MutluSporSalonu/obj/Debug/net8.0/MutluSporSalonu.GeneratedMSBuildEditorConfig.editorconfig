@@ -1,11 +1,19 @@
 is_global = true
 build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MutluSporSalonu
 build_property.RootNamespace = MutluSporSalonu
@@ -20,6 +28,46 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Antrenor/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW50cmVub3JcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Antrenor/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW50cmVub3JcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Antrenor/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW50cmVub3JcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Antrenor/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW50cmVub3JcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Antrenor/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW50cmVub3JcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Hizmet/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGl6bWV0XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Hizmet/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGl6bWV0XERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Hizmet/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGl6bWV0XERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Hizmet/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGl6bWV0XEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Hizmet/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSGl6bWV0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -28,12 +76,72 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Randevu/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Randevu/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Randevu/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Randevu/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Randevu/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmFuZGV2dVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/SporSalonu/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BvclNhbG9udVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/SporSalonu/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BvclNhbG9udVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/SporSalonu/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BvclNhbG9udVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/SporSalonu/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BvclNhbG9udVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/SporSalonu/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BvclNhbG9udVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Uye/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXllXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Uye/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXllXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Uye/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXllXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Uye/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXllXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/Uye/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXllXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Serkan/OneDrive/Masaüstü/Web Programlama Proje/MutluSporSalonu/MutluSporSalonu/Views/_ViewImports.cshtml]
