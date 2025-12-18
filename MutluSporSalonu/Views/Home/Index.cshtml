@@ -1,8 +1,123 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = null;  // ÖNEMLİ: Herhangi bir layout kullanılmasın
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title>Mutlu Spor Salonu – Hoş Geldiniz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <section class="min-vh-100 d-flex align-items-center text-white bg-primary">
+        <div class="container py-5">
+            <div class="row align-items-center g-4">
+
+                <div class="col-lg-6">
+                    <div class="p-4 p-md-5 rounded-4 border border-white border-opacity-25 bg-white bg-opacity-10 shadow">
+                        <h1 class="display-5 fw-bold lh-1">Mutlu Spor Salonu’na Hoş Geldiniz</h1>
+
+                        <p class="mt-3 mb-4 lead text-white-50">
+                            Kişiselleştirilmiş antrenman programları, uzman antrenör kadrosu
+                            ve yapay zekâ destekli egzersiz önerileriyle sağlıklı yaşam yolculuğunuza
+                            bugün başlayın.
+                        </p>
+
+                        <ul class="list-group list-group-flush mb-4">
+                            <li class="list-group-item bg-transparent text-white border-white border-opacity-25 d-flex gap-2 align-items-center">
+                                <span class="badge text-bg-light rounded-pill">✔</span>
+                                Akıllı randevu sistemi
+                            </li>
+                            <li class="list-group-item bg-transparent text-white border-white border-opacity-25 d-flex gap-2 align-items-center">
+                                <span class="badge text-bg-light rounded-pill">✔</span>
+                                Uzman antrenörlerle birebir çalışma
+                            </li>
+                            <li class="list-group-item bg-transparent text-white border-white border-opacity-25 d-flex gap-2 align-items-center">
+                                <span class="badge text-bg-light rounded-pill">✔</span>
+                                Vücut tipinize uygun AI tabanlı egzersiz/diyet önerileri
+                            </li>
+                        </ul>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="/Hesap/Giris" class="btn btn-light btn-lg rounded-pill px-4 fw-semibold">
+                                Giriş Yap / Üye Ol
+                            </a>
+                            <a href="#bilgi" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                                Detaylar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="rounded-4 shadow-lg overflow-hidden border border-white border-opacity-25">
+                        <div id="landingCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="~/img/slider1.jpg" class="d-block w-100" alt="Salon Görseli 1">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5 class="fw-bold">Modern Ekipmanlar</h5>
+                                        <p class="text-white-50">Son teknoloji cihazlarla güvenli ve etkili antrenman.</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="~/img/slider2.jpg" class="d-block w-100" alt="Salon Görseli 2">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5 class="fw-bold">Uzman Antrenörler</h5>
+                                        <p class="text-white-50">Alanında uzman eğitmenlerle hedef odaklı programlar.</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="~/img/slider3.jpg" class="d-block w-100" alt="Salon Görseli 3">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5 class="fw-bold">Yapay Zekâ Destekli Öneriler</h5>
+                                        <p class="text-white-50">Boy, kilo ve vücut tipinize uygun öneriler.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#landingCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Önceki</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#landingCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Sonraki</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-3" id="bilgi">
+                        <div class="col-md-4">
+                            <div class="p-3 rounded-4 border border-white border-opacity-25 bg-white bg-opacity-10 shadow-sm h-100">
+                                <h4 class="h6 fw-bold mb-2">Neden Bu Salon?</h4>
+                                <p class="mb-0 text-white-50">Kişiye özel program, veri odaklı takip ve yüksek motivasyon ortamı.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 rounded-4 border border-white border-opacity-25 bg-white bg-opacity-10 shadow-sm h-100">
+                                <h4 class="h6 fw-bold mb-2">Çalışma Saatleri</h4>
+                                <p class="mb-0 text-white-50">Hafta içi 07:00 – 23:00, hafta sonu 09:00 – 22:00</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 rounded-4 border border-white border-opacity-25 bg-white bg-opacity-10 shadow-sm h-100">
+                                <h4 class="h6 fw-bold mb-2">Randevu Sistemi</h4>
+                                <p class="mb-0 text-white-50">Uygun zaman dilimini seç, antrenörünü belirle, online randevunu oluştur.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+</body>
+</html>

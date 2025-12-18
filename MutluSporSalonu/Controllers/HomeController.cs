@@ -18,6 +18,16 @@ namespace MutluSporSalonu.Controllers
             return View();
         }
 
+        public IActionResult AdminHome()
+        {
+            return View();
+        }
+
+        public IActionResult UyeHome()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

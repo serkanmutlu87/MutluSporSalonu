@@ -1,87 +1,61 @@
 ﻿@model MutluSporSalonu.Models.Randevu
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Randevuyu Sil";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <h2 class="mb-4 text-danger">Randevuyu Sil</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Randevu</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Uye)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Uye.Rol)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Antrenor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Antrenor.AntrenorAdSoyad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hizmet)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Hizmet.HizmetAdi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SalonID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SalonID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuTarihi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuTarihi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuBaslangicSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuBaslangicSaati)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuBitisSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuBitisSaati)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuUcret)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuUcret)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuOnaylandiMi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuOnaylandiMi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuAciklama)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuAciklama)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuOlusturulmaTarihi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuOlusturulmaTarihi)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
+    <div class="alert alert-warning">
+        <strong>Dikkat!</strong> Aşağıdaki randevuyu silmek üzeresiniz. Bu işlem geri alınamaz!
+    </div>
+
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+
+            <h4 class="card-title">
+                @Model.Uye?.UyeAdSoyad - @Model.Hizmet?.HizmetAdi
+            </h4>
+
+            <p class="card-text">
+                <strong>Üye:</strong> @Model.Uye?.UyeAdSoyad <br />
+                <strong>Antrenör:</strong> @Model.Antrenor?.AntrenorAdSoyad <br />
+                <strong>Hizmet:</strong> @Model.Hizmet?.HizmetAdi <br />
+                <strong>Salon:</strong> @Model.SporSalonu?.SalonAdi
+            </p>
+
+            <p class="card-text">
+                <strong>Tarih:</strong> @Model.RandevuTarihi.ToString("dd.MM.yyyy") <br />
+                <strong>Saat:</strong>
+                @Model.RandevuBaslangicSaati.ToString(@"hh\:mm")
+                -
+                @Model.RandevuBitisSaati.ToString(@"hh\:mm") <br />
+                <strong>Ücret:</strong> @Model.RandevuUcret ₺
+            </p>
+
+            <p class="card-text">
+                <strong>Durum:</strong>
+                @if (Model.RandevuOnaylandiMi)
+                {
+                    <span class="badge bg-success">Onaylandı</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Beklemede</span>
+                }
+            </p>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="RandevuID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+            <button type="submit" class="btn btn-danger">
+                Evet, Sil
+            </button>
+        </div>
     </form>
 </div>

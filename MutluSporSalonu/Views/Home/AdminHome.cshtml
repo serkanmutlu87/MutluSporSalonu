@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Admin Ana Sayfa";
+}
+
+<div class="container mt-4">
+
+    <!-- HERO / BAŞLIK BÖLÜMÜ -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7">
+            <h1 class="display-5 fw-bold mb-3">
+                Admin Paneli
+            </h1>
+            <p class="lead">
+                Sistem genelini buradan yönetirsiniz: salon, antrenör, hizmet ve randevu akışı.
+                Günlük operasyonu takip edin, kayıtları güncelleyin ve randevu süreçlerini kontrol edin.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a asp-controller="Randevu" asp-action="Index" class="btn btn-success">
+                    Randevu Listesi
+                </a>
+                <a asp-controller="YapayZeka" asp-action="Oneri" class="btn btn-outline-primary">
+                    AI Öneri Ekranı
+                </a>
+                <a asp-controller="Uye" asp-action="Index" class="btn btn-outline-secondary">
+                    Üye Listesi
+                </a>
+            </div>
+
+            <p class="small text-muted mt-3 mb-0">
+                İpucu: Yeni bir yapı kuruyorsanız önce <strong>Spor Salonu</strong> → <strong>Hizmet</strong> → <strong>Antrenör</strong> tanımlayın,
+                sonra randevu akışını başlatın.
+            </p>
+        </div>
+
+        <div class="col-md-5 mt-4 mt-md-0 text-center">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Hızlı Kontrol Listesi</h5>
+                    <ul class="list-unstyled text-start small mb-0">
+                        <li class="mb-2"><strong>Bugünkü randevular</strong> ve çakışmaları kontrol edin.</li>
+                        <li class="mb-2">Antrenör <strong>müsaitlik aralıkları</strong> güncel mi bakın.</li>
+                        <li class="mb-2">Hizmet <strong>süre/ücret</strong> bilgilerinde hata var mı doğrulayın.</li>
+                        <li class="mb-2">Randevu <strong>onay/iptal</strong> durumlarını takip edin.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANA MODÜLLER KARTLARI -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Spor Salonları</h5>
+                    <p class="card-text small flex-grow-1">
+                        Salon kayıtlarını oluşturun, düzenleyin ve görünürlük/iletişim bilgilerini güncel tutun.
+                    </p>
+                    <a asp-controller="SporSalonu" asp-action="Index" class="btn btn-outline-primary mt-2">
+                        Salon Yönetimi
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Hizmetler</h5>
+                    <p class="card-text small flex-grow-1">
+                        Hizmet tanımlarını yönetin: süre (dk), ücret ve açıklama bilgilerini standartlaştırın.
+                    </p>
+                    <a asp-controller="Hizmet" asp-action="Index" class="btn btn-outline-primary mt-2">
+                        Hizmet Yönetimi
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Antrenörler</h5>
+                    <p class="card-text small flex-grow-1">
+                        Antrenör profilini ve müsaitlik saatlerini yönetin. Randevu planlaması bu bilgilere göre yapılır.
+                    </p>
+                    <a asp-controller="Antrenor" asp-action="Index" class="btn btn-outline-primary mt-2">
+                        Antrenör Yönetimi
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Randevular</h5>
+                    <p class="card-text small flex-grow-1">
+                        Randevuları oluşturun, düzenleyin ve onay durumlarını yönetin. Çakışma ve süre kontrolü yapın.
+                    </p>
+                    <a asp-controller="Randevu" asp-action="Create" class="btn btn-outline-primary mt-2">
+                        Randevu Oluştur
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YAPAY ZEKA VE API BÖLÜMÜ -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">AI Öneri Modülü</h5>
+                    <p class="card-text small">
+                        Üyelerin hedef ve ölçüm bilgilerine göre egzersiz/beslenme planı üretimini buradan test edin ve çıktıları kontrol edin.
+                    </p>
+                    <a asp-controller="YapayZeka" asp-action="Oneri" class="btn btn-success btn-sm">
+                        Öneri Ekranına Git
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Raporlama & Veri Kontrol</h5>
+                    <p class="card-text small">
+                        Yönetim kararları için veriyi düzenli tutun. Randevu yoğunluğu, antrenör doluluk oranı ve hizmet tercihleri gibi bilgileri izleyin.
+                    </p>
+                    <ul class="small mb-0">
+                        <li>Gün / hafta bazında randevu yoğunluğu</li>
+                        <li>Antrenör doluluk ve müsaitlik tutarlılığı</li>
+                        <li>Hizmet bazlı talep (popüler hizmetler)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALT BİLGİ -->
+    <div class="alert alert-secondary small" role="alert">
+        <strong>Not:</strong> Yönetim paneli üzerinden yapılan değişiklikler sistem geneline etki eder.
+        Kayıt silme/güncelleme işlemlerinde randevu ilişkilerini kontrol etmeyi unutmayın.
+    </div>
+</div>

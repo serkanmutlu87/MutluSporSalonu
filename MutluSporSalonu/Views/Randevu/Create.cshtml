@@ -1,80 +1,111 @@
 ﻿@model MutluSporSalonu.Models.Randevu
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Yeni Randevu Oluştur";
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <h2 class="mb-4">Yeni Randevu Oluştur</h2>
 
-<h4>Randevu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UyeID" class="control-label"></label>
-                <select asp-for="UyeID" class ="form-control" asp-items="ViewBag.UyeID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="AntrenorID" class="control-label"></label>
-                <select asp-for="AntrenorID" class ="form-control" asp-items="ViewBag.AntrenorID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="HizmetID" class="control-label"></label>
-                <select asp-for="HizmetID" class ="form-control" asp-items="ViewBag.HizmetID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SalonID" class="control-label"></label>
-                <input asp-for="SalonID" class="form-control" />
-                <span asp-validation-for="SalonID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RandevuTarihi" class="control-label"></label>
-                <input asp-for="RandevuTarihi" class="form-control" />
-                <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RandevuBaslangicSaati" class="control-label"></label>
-                <input asp-for="RandevuBaslangicSaati" class="form-control" />
-                <span asp-validation-for="RandevuBaslangicSaati" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RandevuBitisSaati" class="control-label"></label>
-                <input asp-for="RandevuBitisSaati" class="form-control" />
-                <span asp-validation-for="RandevuBitisSaati" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RandevuUcret" class="control-label"></label>
-                <input asp-for="RandevuUcret" class="form-control" />
-                <span asp-validation-for="RandevuUcret" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RandevuOnaylandiMi" /> @Html.DisplayNameFor(model => model.RandevuOnaylandiMi)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="RandevuAciklama" class="control-label"></label>
-                <input asp-for="RandevuAciklama" class="form-control" />
-                <span asp-validation-for="RandevuAciklama" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RandevuOlusturulmaTarihi" class="control-label"></label>
-                <input asp-for="RandevuOlusturulmaTarihi" class="form-control" />
-                <span asp-validation-for="RandevuOlusturulmaTarihi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <form asp-action="Create" method="post" class="row g-3">
 
-<div>
-    <a asp-action="Index">Back to List</a>
+        <div class="col-md-4">
+            <label class="form-label">Üye</label>
+            <select asp-for="UyeID" asp-items="ViewBag.Uyeler" class="form-select">
+                <option value="">-- Üye Seçiniz --</option>
+            </select>
+            <span asp-validation-for="UyeID" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Antrenör</label>
+            <select asp-for="AntrenorID" asp-items="ViewBag.Antrenorler" class="form-select" id="antrenorSecim">
+                <option value="">-- Antrenör Seçiniz --</option>
+            </select>
+            <span asp-validation-for="AntrenorID" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Hizmet</label>
+            <select asp-for="HizmetID" asp-items="ViewBag.Hizmetler" class="form-select" id="hizmetSecim">
+                <option value="">-- Hizmet Seçiniz --</option>
+            </select>
+            <span asp-validation-for="HizmetID" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="SalonID" class="form-label">Salon</label>
+            <select asp-for="SalonID" asp-items="ViewBag.SporSalonlari" class="form-select">
+                <option value="">-- Salon Seçiniz --</option>
+            </select>
+            <span asp-validation-for="SalonID" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="RandevuTarihi" class="form-label">Tarih</label>
+            <input asp-for="RandevuTarihi" class="form-control" type="date" />
+            <span asp-validation-for="RandevuTarihi" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-2">
+            <label asp-for="RandevuBaslangicSaati" class="form-label">Başlangıç</label>
+            <input asp-for="RandevuBaslangicSaati" class="form-control" type="time" id="baslangicSaat" />
+            <span asp-validation-for="RandevuBaslangicSaati" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-2">
+            <label asp-for="RandevuBitisSaati" class="form-label">Bitiş</label>
+            <input asp-for="RandevuBitisSaati" class="form-control" type="time" id="bitisSaat" />
+            <span asp-validation-for="RandevuBitisSaati" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            <button type="submit" class="btn btn-success">Kaydet</button>
+        </div>
+
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Hizmet süresine göre bitiş saati otomatik hesaplama
+        @*var hizmetSureleri = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+            ((SelectList)ViewBag.Hizmetler).Items
+        ));*@
+
+        document.getElementById("hizmetSecim").addEventListener("change", function () {
+            var secilenId = this.value;
+
+            // Hizmet süresi bul
+            fetch('/Api/HizmetApi/' + secilenId) // API eklediğimizde çalışacak
+                .then(r => r.json())
+                .then(data => {
+                    window.hizmetSuresi = data.sure;
+                });
+        });
+
+        // Başlangıç saati girildiğinde otomatik olarak bitişi hesapla
+        document.getElementById("baslangicSaat").addEventListener("input", function () {
+            if (!window.hizmetSuresi)
+                return;
+
+            var bas = this.value;
+            if (!bas) return;
+
+            var [saat, dakika] = bas.split(":");
+            var basDate = new Date(0, 0, 0, parseInt(saat), parseInt(dakika));
+
+            basDate.setMinutes(basDate.getMinutes() + window.hizmetSuresi);
+
+            var yeniSaat = basDate.getHours().toString().padStart(2, "0");
+            var yeniDakika = basDate.getMinutes().toString().padStart(2, "0");
+
+            document.getElementById("bitisSaat").value = yeniSaat + ":" + yeniDakika;
+        });
+    </script>
 }

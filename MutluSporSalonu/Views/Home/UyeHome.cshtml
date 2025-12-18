@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Üye Ana Sayfa";
+}
+
+<div class="container mt-4">
+
+    <!-- HERO / KARŞILAMA -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-7">
+            <h1 class="display-5 fw-bold mb-3">
+                Hoş Geldiniz 👋
+            </h1>
+
+            <p class="lead">
+                Randevularınızı buradan yönetin, antrenör ve hizmet seçin.
+                Yapay zekâ destekli egzersiz ve beslenme önerileriyle hedefinize
+                daha planlı ilerleyin.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a asp-controller="Randevu" asp-action="Index" class="btn btn-success">
+                    Randevularım
+                </a>
+                <a asp-controller="Randevu" asp-action="Create" class="btn btn-outline-primary">
+                    Yeni Randevu Oluştur
+                </a>
+                <a asp-controller="YapayZeka" asp-action="Oneri" class="btn btn-outline-secondary">
+                    AI Öneri Al
+                </a>
+            </div>
+
+            <p class="small text-muted mt-3 mb-0">
+                İpucu: Daha iyi öneriler için profil ve ölçüm bilgilerinizi güncel tutun.
+            </p>
+        </div>
+
+        <div class="col-md-5 mt-4 mt-md-0">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Bugün Neler Yapabilirsiniz?</h5>
+                    <ul class="list-unstyled small mb-0">
+                        <li class="mb-2">Mevcut <strong>randevularınızı</strong> kontrol edin</li>
+                        <li class="mb-2">Yeni bir <strong>antrenör & hizmet</strong> seçin</li>
+                        <li class="mb-2"><strong>AI destekli</strong> egzersiz önerisi alın</li>
+                        <li class="mb-2">Hedeflerinize göre planınızı güncelleyin</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANA KARTLAR -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Randevularım</h5>
+                    <p class="card-text small flex-grow-1">
+                        Geçmiş ve yaklaşan randevularınızı görüntüleyin,
+                        saat ve antrenör bilgilerini kontrol edin.
+                    </p>
+                    <a asp-controller="Randevu" asp-action="Index" class="btn btn-outline-primary mt-2">
+                        Randevuları Gör
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Yeni Randevu</h5>
+                    <p class="card-text small flex-grow-1">
+                        Size uygun hizmeti ve antrenörü seçerek
+                        kolayca yeni bir randevu oluşturun.
+                    </p>
+                    <a asp-controller="Randevu" asp-action="Create" class="btn btn-outline-primary mt-2">
+                        Randevu Oluştur
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Antrenörler</h5>
+                    <p class="card-text small flex-grow-1">
+                        Antrenörlerin uzmanlık alanlarını ve
+                        müsaitlik durumlarını inceleyin.
+                    </p>
+                    <a asp-controller="Antrenor" asp-action="Index" class="btn btn-outline-primary mt-2">
+                        Antrenörleri Gör
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Hizmetler</h5>
+                    <p class="card-text small flex-grow-1">
+                        Fitness, pilates, yoga gibi hizmetleri
+                        süre ve ücret bilgileriyle inceleyin.
+                    </p>
+                    <a asp-controller="Hizmet" asp-action="Index" class="btn btn-outline-primary mt-2">
+                        Hizmetleri Gör
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI ÖNERİ + BİLGİ -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Yapay Zekâ Destekli Öneriler</h5>
+                    <p class="card-text small">
+                        Boy, kilo, hedef ve vücut tipi bilgilerinizi girerek
+                        size özel egzersiz ve beslenme önerileri alın.
+                    </p>
+                    <a asp-controller="YapayZeka" asp-action="Oneri" class="btn btn-success btn-sm">
+                        Öneri Al
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">İlerleme Takibi</h5>
+                    <p class="card-text small">
+                        Düzenli antrenman ve randevular sayesinde
+                        hedeflerinize ne kadar yaklaştığınızı takip edin.
+                    </p>
+                    <ul class="small mb-0">
+                        <li>Antrenman düzeni</li>
+                        <li>Randevu sürekliliği</li>
+                        <li>Hedef uyumu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALT BİLGİ -->
+    <div class="alert alert-light small" role="alert">
+        Sağlıklı yaşam bir süreçtir. Düzenli randevu ve doğru planlama ile
+        en iyi sonucu alabilirsiniz.
+    </div>
+
+</div>

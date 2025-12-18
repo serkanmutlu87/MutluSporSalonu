@@ -1,84 +1,85 @@
 ﻿@model MutluSporSalonu.Models.Randevu
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Randevu Detay";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
 
-<div>
-    <h4>Randevu</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Uye)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Uye.Rol)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Antrenor)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Antrenor.AntrenorAdSoyad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hizmet)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Hizmet.HizmetAdi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SalonID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SalonID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuTarihi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuTarihi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuBaslangicSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuBaslangicSaati)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuBitisSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuBitisSaati)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuUcret)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuUcret)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuOnaylandiMi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuOnaylandiMi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuAciklama)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuAciklama)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RandevuOlusturulmaTarihi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RandevuOlusturulmaTarihi)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.RandevuID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Randevu Detayı</h2>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <h4 class="card-title">
+                @Model.Uye?.UyeAdSoyad
+                -
+                @Model.Hizmet?.HizmetAdi
+            </h4>
+
+            <p class="card-text">
+                <strong>Üye:</strong> @Model.Uye?.UyeAdSoyad <br />
+                <strong>Antrenör:</strong> @Model.Antrenor?.AntrenorAdSoyad <br />
+                <strong>Hizmet:</strong> @Model.Hizmet?.HizmetAdi <br />
+                <strong>Salon:</strong> @Model.SporSalonu?.SalonAdi
+            </p>
+
+            <p class="card-text">
+                <strong>Tarih:</strong> @Model.RandevuTarihi.ToString("dd.MM.yyyy") <br />
+                <strong>Saat:</strong>
+                @Model.RandevuBaslangicSaati.ToString(@"hh\:mm")
+                -
+                @Model.RandevuBitisSaati.ToString(@"hh\:mm") <br />
+                <strong>Ücret:</strong> @Model.RandevuUcret ₺
+            </p>
+
+            <p class="card-text">
+                <strong>Onay Durumu:</strong>
+                @if (Model.RandevuOnaylandiMi)
+                {
+                    <span class="badge bg-success">Onaylandı</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Beklemede</span>
+                }
+            </p>
+
+            <p class="card-text">
+                <strong>Oluşturulma Tarihi:</strong>
+                @Model.RandevuOlusturulmaTarihi.ToString("dd.MM.yyyy HH:mm")
+            </p>
+
+            <p class="card-text">
+                <strong>Açıklama / Not:</strong><br />
+                @if (string.IsNullOrWhiteSpace(Model.RandevuAciklama))
+                {
+                    <span class="text-muted">Açıklama girilmemiş.</span>
+                }
+                else
+                {
+                    @Model.RandevuAciklama
+                }
+            </p>
+
+            <div class="mt-3">
+                <a asp-action="Edit" asp-route-id="@Model.RandevuID" class="btn btn-warning">Düzenle</a>
+                <a asp-action="Delete" asp-route-id="@Model.RandevuID" class="btn btn-danger">Sil</a>
+
+                @if (!Model.RandevuOnaylandiMi)
+                {
+                    <form asp-action="Onayla" asp-route-id="@Model.RandevuID" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-success">
+                            Randevuyu Onayla
+                        </button>
+                    </form>
+                }
+            </div>
+
+        </div>
+    </div>
+
 </div>
