@@ -1,54 +1,83 @@
 ﻿@model MutluSporSalonu.Models.Uye
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Üye Detay";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
 
-<div>
-    <h4>Uye</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UyeAdSoyad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UyeAdSoyad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UyeEposta)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UyeEposta)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UyeSifre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UyeSifre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UyeTelefon)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UyeTelefon)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.KayitTarihi)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.KayitTarihi)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rol)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rol)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.UyeID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="d-flex justify-content-between mb-3">
+        <h2>@Model.UyeAdSoyad - Üye Detay</h2>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <h4 class="card-title">@Model.UyeAdSoyad</h4>
+
+            <p class="card-text">
+                <strong>E-posta:</strong> @Model.UyeEposta <br />
+                <strong>Telefon:</strong> @(string.IsNullOrWhiteSpace(Model.UyeTelefon) ? "-" : Model.UyeTelefon) <br />
+                <strong>Rol:</strong> @Model.Rol <br />
+                <strong>Kayıt Tarihi:</strong> @Model.KayitTarihi.ToString("dd.MM.yyyy") <br />
+            </p>
+
+            <div class="mt-3">
+                <a asp-action="Edit" asp-route-id="@Model.UyeID" class="btn btn-warning">Düzenle</a>
+                <a asp-action="Delete" asp-route-id="@Model.UyeID" class="btn btn-danger">Sil</a>
+            </div>
+
+        </div>
+    </div>
+
+    <h4 class="mt-4">Randevular</h4>
+
+    @if (Model.Randevular == null || !Model.Randevular.Any())
+    {
+        <div class="alert alert-info">
+            Bu üyeye ait randevu bulunmuyor.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Hizmet</th>
+                    <th>Antrenör</th>
+                    <th>Tarih</th>
+                    <th>Saat</th>
+                    <th>Ücret</th>
+                    <th>Onay</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Randevular)
+                {
+                    <tr>
+                        <td>@r.Hizmet?.HizmetAdi</td>
+                        <td>@r.Antrenor?.AntrenorAdSoyad</td>
+                        <td>@r.RandevuTarihi.ToString("dd.MM.yyyy")</td>
+                        <td>
+                            @r.RandevuBaslangicSaati.ToString(@"hh\:mm") -
+                            @r.RandevuBitisSaati.ToString(@"hh\:mm")
+                        </td>
+                        <td>@r.RandevuUcret ₺</td>
+                        <td>
+                            @if (r.RandevuOnaylandiMi)
+                            {
+                                <span class="badge bg-success">Onaylandı</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Beklemede</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
 </div>

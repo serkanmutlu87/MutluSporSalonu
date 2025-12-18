@@ -1,58 +1,56 @@
 ﻿@model MutluSporSalonu.Models.Uye
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Üye Ol";
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <h2 class="mb-4">Mutlu Spor Salonu - Üye Ol</h2>
 
-<h4>Uye</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UyeAdSoyad" class="control-label"></label>
-                <input asp-for="UyeAdSoyad" class="form-control" />
-                <span asp-validation-for="UyeAdSoyad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UyeEposta" class="control-label"></label>
-                <input asp-for="UyeEposta" class="form-control" />
-                <span asp-validation-for="UyeEposta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UyeSifre" class="control-label"></label>
-                <input asp-for="UyeSifre" class="form-control" />
-                <span asp-validation-for="UyeSifre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UyeTelefon" class="control-label"></label>
-                <input asp-for="UyeTelefon" class="form-control" />
-                <span asp-validation-for="UyeTelefon" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="KayitTarihi" class="control-label"></label>
-                <input asp-for="KayitTarihi" class="form-control" />
-                <span asp-validation-for="KayitTarihi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rol" class="control-label"></label>
-                <input asp-for="Rol" class="form-control" />
-                <span asp-validation-for="Rol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-8">
+
+            <form asp-action="Create" method="post" class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="UyeAdSoyad" class="form-label"></label>
+                    <input asp-for="UyeAdSoyad" class="form-control" />
+                    <span asp-validation-for="UyeAdSoyad" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="UyeEposta" class="form-label"></label>
+                    <input asp-for="UyeEposta" class="form-control" />
+                    <span asp-validation-for="UyeEposta" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="UyeSifre" class="form-label"></label>
+                    <input asp-for="UyeSifre" class="form-control" />
+                    <span asp-validation-for="UyeSifre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="UyeTelefon" class="form-label"></label>
+                    <input asp-for="UyeTelefon" class="form-control" />
+                    <span asp-validation-for="UyeTelefon" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="Rol" />
+
+                <div class="col-12 mt-3 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success">
+                        Üye Ol
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -10,21 +10,21 @@ namespace MutluSporSalonu.Models
         [Required(ErrorMessage = "Ad soyad bilgisi zorunludur.")]
         [StringLength(100)]
         [Display(Name = "Ad Soyad")]
-        public string AntrenorAdSoyad { get; set; }
+        public string AntrenorAdSoyad { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Uzmanlık alanı zorunludur.")]
         [StringLength(200)]
         [Display(Name = "Uzmanlık Alanları")]
-        public string AntrenorUzmanlikAlanlari { get; set; }
+        public string AntrenorUzmanlikAlanlari { get; set; } = string.Empty;
         // Örn: "Kas Geliştirme, Yoga, Kilo Verme"
 
         [Display(Name = "Telefon")]
         [StringLength(20)]
-        public string AntrenorTelefon { get; set; }
+        public string? AntrenorTelefon { get; set; }
 
         [Display(Name = "E-posta")]
         [EmailAddress]
-        public string AntrenorEposta { get; set; }
+        public string? AntrenorEposta { get; set; }
 
         // Müsaitlik Saatleri
         [Required]

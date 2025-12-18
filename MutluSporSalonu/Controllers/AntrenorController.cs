@@ -68,8 +68,8 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
-            ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
+            ViewBag.SalonID = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
+            ViewBag.HizmetID = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View(antrenor);
         }
 

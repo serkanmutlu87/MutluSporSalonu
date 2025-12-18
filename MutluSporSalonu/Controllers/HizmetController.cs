@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace MutluSporSalonu.Controllers
 {
-    [Authorize]
     public class HizmetController : Controller
     {
         private readonly DBContext _context;
@@ -49,7 +48,7 @@ namespace MutluSporSalonu.Controllers
         // GET: Hizmet/Create
         public IActionResult Create()
         {
-            ViewData["SalonID"] = new SelectList(_context.Salonlar.ToList(), "SalonID", "SalonAdi");
+            ViewBag.SalonID = new SelectList(_context.Salonlar.ToList(), "SalonID", "SalonAdi");
             return View();
         }
 
@@ -66,7 +65,7 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
+            ViewBag.SalonID = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
@@ -83,7 +82,7 @@ namespace MutluSporSalonu.Controllers
             {
                 return NotFound();
             }
-            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
+            ViewBag.SalonID = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 
@@ -119,7 +118,7 @@ namespace MutluSporSalonu.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
+            ViewBag.SalonID = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", hizmet.SalonID);
             return View(hizmet);
         }
 

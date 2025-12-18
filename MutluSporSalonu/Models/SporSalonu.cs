@@ -10,12 +10,12 @@ namespace MutluSporSalonu.Models
         [Required(ErrorMessage = "Salon adı zorunludur.")]
         [StringLength(100)]
         [Display(Name = "Salon Adı")]
-        public string SalonAdi { get; set; }
+        public string SalonAdi { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Adres zorunludur.")]
         [StringLength(250)]
         [Display(Name = "Adres")]
-        public string SalonAdres { get; set; }
+        public string SalonAdres { get; set; } = string.Empty;
 
         [Required]
         [Display(Name = "Açılış Saati")]
@@ -27,7 +27,7 @@ namespace MutluSporSalonu.Models
 
         [StringLength(500)]
         [Display(Name = "Açıklama")]
-        public string SalonAciklama { get; set; }
+        public string? SalonAciklama { get; set; }
 
         // İlişkiler
         [Display(Name = "Hizmetler")]

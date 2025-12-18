@@ -1,54 +1,58 @@
 ﻿@model MutluSporSalonu.Models.Hizmet
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Hizmet Düzenle";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <h2 class="mb-4">Hizmet Düzenle</h2>
 
-<h4>Hizmet</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="HizmetID" />
-            <div class="form-group">
-                <label asp-for="HizmetAdi" class="control-label"></label>
-                <input asp-for="HizmetAdi" class="form-control" />
-                <span asp-validation-for="HizmetAdi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HizmetSureDakika" class="control-label"></label>
-                <input asp-for="HizmetSureDakika" class="form-control" />
-                <span asp-validation-for="HizmetSureDakika" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HizmetUcret" class="control-label"></label>
-                <input asp-for="HizmetUcret" class="form-control" />
-                <span asp-validation-for="HizmetUcret" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HizmetAciklama" class="control-label"></label>
-                <input asp-for="HizmetAciklama" class="form-control" />
-                <span asp-validation-for="HizmetAciklama" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SalonID" class="control-label"></label>
-                <select asp-for="SalonID" class="form-control" asp-items="ViewBag.SalonID"></select>
-                <span asp-validation-for="SalonID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <form asp-action="Edit" method="post" class="row g-3">
 
-<div>
-    <a asp-action="Index">Back to List</a>
+        <input type="hidden" asp-for="HizmetID" />
+
+        <div class="col-md-6">
+            <label asp-for="HizmetAdi" class="form-label"></label>
+            <input asp-for="HizmetAdi" class="form-control" />
+            <span asp-validation-for="HizmetAdi" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="HizmetSureDakika" class="form-label"></label>
+            <input asp-for="HizmetSureDakika" class="form-control" type="number" min="1" />
+            <span asp-validation-for="HizmetSureDakika" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="HizmetUcret" class="form-label"></label>
+            <input asp-for="HizmetUcret" class="form-control" type="number" step="0.01" min="0" />
+            <span asp-validation-for="HizmetUcret" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="SalonID" class="form-label">Spor Salonu</label>
+            <select asp-for="SalonID" asp-items="ViewBag.SalonID" class="form-select">
+                <option value="">-- Seçiniz --</option>
+            </select>
+            <span asp-validation-for="SalonID" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="HizmetAciklama" class="form-label"></label>
+            <textarea asp-for="HizmetAciklama" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="HizmetAciklama" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between mt-3">
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            <button type="submit" class="btn btn-warning">Güncelle</button>
+        </div>
+
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

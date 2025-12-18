@@ -10,18 +10,18 @@ namespace MutluSporSalonu.Models
         [Required(ErrorMessage = "Ad soyad zorunludur.")]
         [StringLength(100)]
         [Display(Name = "Ad Soyad")]
-        public string UyeAdSoyad { get; set; }
+        public string UyeAdSoyad { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "E-posta adresi zorunludur.")]
         [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
         [Display(Name = "E-posta")]
-        public string UyeEposta { get; set; }
+        public string UyeEposta { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Şifre zorunludur.")]
         [StringLength(100, MinimumLength = 4, ErrorMessage = "Şifre en az 4 karakter olmalıdır.")]
         [DataType(DataType.Password)]
         [Display(Name = "Şifre")]
-        public string UyeSifre { get; set; }
+        public string UyeSifre { get; set; } = string.Empty;
 
         [Display(Name = "Telefon")]
         [StringLength(20)]

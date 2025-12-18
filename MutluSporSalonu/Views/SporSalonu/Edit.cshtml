@@ -1,54 +1,56 @@
 ﻿@model MutluSporSalonu.Models.SporSalonu
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Spor Salonu Düzenle";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <h2 class="mb-4">Spor Salonu Düzenle</h2>
 
-<h4>SporSalonu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SalonID" />
-            <div class="form-group">
-                <label asp-for="SalonAdi" class="control-label"></label>
-                <input asp-for="SalonAdi" class="form-control" />
-                <span asp-validation-for="SalonAdi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SalonAdres" class="control-label"></label>
-                <input asp-for="SalonAdres" class="form-control" />
-                <span asp-validation-for="SalonAdres" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SalonAcilisSaati" class="control-label"></label>
-                <input asp-for="SalonAcilisSaati" class="form-control" />
-                <span asp-validation-for="SalonAcilisSaati" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SalonKapanisSaati" class="control-label"></label>
-                <input asp-for="SalonKapanisSaati" class="form-control" />
-                <span asp-validation-for="SalonKapanisSaati" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SalonAciklama" class="control-label"></label>
-                <input asp-for="SalonAciklama" class="form-control" />
-                <span asp-validation-for="SalonAciklama" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <form asp-action="Edit" method="post" class="row g-3">
 
-<div>
-    <a asp-action="Index">Back to List</a>
+        <input type="hidden" asp-for="SalonID" />
+
+        <div class="col-md-6">
+            <label asp-for="SalonAdi" class="form-label"></label>
+            <input asp-for="SalonAdi" class="form-control" />
+            <span asp-validation-for="SalonAdi" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="SalonAdres" class="form-label"></label>
+            <input asp-for="SalonAdres" class="form-control" />
+            <span asp-validation-for="SalonAdres" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="SalonAcilisSaati" class="form-label"></label>
+            <input asp-for="SalonAcilisSaati" class="form-control" type="time" />
+            <span asp-validation-for="SalonAcilisSaati" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="SalonKapanisSaati" class="form-label"></label>
+            <input asp-for="SalonKapanisSaati" class="form-control" type="time" />
+            <span asp-validation-for="SalonKapanisSaati" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="SalonAciklama" class="form-label"></label>
+            <textarea asp-for="SalonAciklama" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="SalonAciklama" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between mt-3">
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            <button type="submit" class="btn btn-warning">Güncelle</button>
+        </div>
+
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
