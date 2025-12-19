@@ -69,7 +69,7 @@
                 <a asp-action="Edit" asp-route-id="@Model.RandevuID" class="btn btn-warning">Düzenle</a>
                 <a asp-action="Delete" asp-route-id="@Model.RandevuID" class="btn btn-danger">Sil</a>
 
-                @if (!Model.RandevuOnaylandiMi)
+                @if (User.IsInRole("Admin") && !Model.RandevuOnaylandiMi)
                 {
                     <form asp-action="Onayla" asp-route-id="@Model.RandevuID" method="post" class="d-inline">
                         <button type="submit" class="btn btn-success">
@@ -77,6 +77,7 @@
                         </button>
                     </form>
                 }
+
             </div>
 
         </div>

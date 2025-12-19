@@ -2,51 +2,66 @@
 
 @{
     ViewData["Title"] = "Antrenörü Sil";
+    bool adminMi = User?.IsInRole("Admin") ?? false;
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4 text-danger">Antrenörü Sil</h2>
 
-    <div class="alert alert-warning">
-        <strong>Dikkat!</strong> Aşağıdaki antrenörü silmek üzeresiniz. Bu işlem geri alınamaz!
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4 class="card-title">@Model.AntrenorAdSoyad</h4>
-
-            <p class="card-text">
-                <strong>Uzmanlık Alanları:</strong><br />
-                @Model.AntrenorUzmanlikAlanlari
-            </p>
-
-            <p class="card-text">
-                <strong>Spor Salonu:</strong>
-                @if (Model.SporSalonu != null)
-                {
-                    @Model.SporSalonu.SalonAdi
-                }
-                else
-                {
-                    <span class="text-muted">Tanımlı spor salonu yok.</span>
-                }
-            </p>
-
-            <p class="card-text">
-                <strong>Müsaitlik Saatleri:</strong><br />
-                @Model.AntrenorMusaitlikBaslangic.ToString(@"hh\:mm")
-                -
-                @Model.AntrenorMusaitlikBitis.ToString(@"hh\:mm")
-            </p>
+    @if (!adminMi)
+    {
+        <div class="alert alert-danger">
+            <strong>Yetkisiz erişim!</strong><br />
+            Antrenör silme işlemi sadece <strong>Admin</strong> kullanıcılar tarafından yapılabilir.
         </div>
-    </div>
 
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="AntrenorID" />
+        <a asp-action="Index" class="btn btn-secondary mt-3">Geri Dön</a>
+    }
+    else
+    {
+        <h2 class="mb-4 text-danger">Antrenörü Sil</h2>
 
-        <div class="d-flex justify-content-between">
-            <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
-            <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <div class="alert alert-warning">
+            <strong>Dikkat!</strong> Aşağıdaki antrenörü silmek üzeresiniz. Bu işlem geri alınamaz!
         </div>
-    </form>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title">@Model.AntrenorAdSoyad</h4>
+
+                <p class="card-text">
+                    <strong>Uzmanlık Alanları:</strong><br />
+                    @Model.AntrenorUzmanlikAlanlari
+                </p>
+
+                <p class="card-text">
+                    <strong>Spor Salonu:</strong>
+                    @if (Model.SporSalonu != null)
+                    {
+                        @Model.SporSalonu.SalonAdi
+                    }
+                    else
+                    {
+                        <span class="text-muted">Tanımlı spor salonu yok.</span>
+                    }
+                </p>
+
+                <p class="card-text">
+                    <strong>Müsaitlik Saatleri:</strong><br />
+                    @Model.AntrenorMusaitlikBaslangic.ToString(@"hh\:mm")
+                    -
+                    @Model.AntrenorMusaitlikBitis.ToString(@"hh\:mm")
+                </p>
+            </div>
+        </div>
+
+        <form asp-action="Delete" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="AntrenorID" />
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+                <button type="submit" class="btn btn-danger">Evet, Sil</button>
+            </div>
+        </form>
+    }
 </div>

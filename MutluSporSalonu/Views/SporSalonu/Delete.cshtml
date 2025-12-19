@@ -5,38 +5,52 @@
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4 text-danger">Spor Salonunu Sil</h2>
 
-    <div class="alert alert-warning">
-        <strong>Dikkat!</strong> Aşağıdaki spor salonunu silmek üzeresiniz. Bu işlem geri alınamaz.
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4 class="card-title">@Model.SalonAdi</h4>
-            <p class="card-text">
-                <strong>Adres:</strong> @Model.SalonAdres <br />
-                <strong>Çalışma Saatleri:</strong>
-                @Model.SalonAcilisSaati.ToString(@"hh\:mm") - @Model.SalonKapanisSaati.ToString(@"hh\:mm") <br />
-                <strong>Açıklama:</strong>
-                @if (string.IsNullOrWhiteSpace(Model.SalonAciklama))
-                {
-                    <span class="text-muted">Açıklama bulunmuyor.</span>
-                }
-                else
-                {
-                    @Model.SalonAciklama
-                }
-            </p>
+    @if (!User.IsInRole("Admin"))
+    {
+        <div class="alert alert-danger">
+            Bu işlem için yetkiniz yok. Spor salonu silme işlemini sadece <b>Admin</b> yapabilir.
         </div>
-    </div>
 
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="SalonID" />
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    }
+    else
+    {
+        <h2 class="mb-4 text-danger">Spor Salonunu Sil</h2>
 
-        <div class="d-flex justify-content-between">
-            <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
-            <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <div class="alert alert-warning">
+            <strong>Dikkat!</strong> Aşağıdaki spor salonunu silmek üzeresiniz. Bu işlem geri alınamaz.
         </div>
-    </form>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title">@Model.SalonAdi</h4>
+                <p class="card-text">
+                    <strong>Adres:</strong> @Model.SalonAdres <br />
+                    <strong>Çalışma Saatleri:</strong>
+                    @Model.SalonAcilisSaati.ToString(@"hh\:mm") -
+                    @Model.SalonKapanisSaati.ToString(@"hh\:mm") <br />
+                    <strong>Açıklama:</strong>
+                    @if (string.IsNullOrWhiteSpace(Model.SalonAciklama))
+                    {
+                        <span class="text-muted">Açıklama bulunmuyor.</span>
+                    }
+                    else
+                    {
+                        @Model.SalonAciklama
+                    }
+                </p>
+            </div>
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="SalonID" />
+
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+                <button type="submit" class="btn btn-danger">Evet, Sil</button>
+            </div>
+        </form>
+    }
+
 </div>

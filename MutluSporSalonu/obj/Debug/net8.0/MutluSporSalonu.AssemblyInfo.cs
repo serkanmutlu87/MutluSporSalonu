@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MutluSporSalonu")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+860833405116388e5b500b062557d1061225a8df")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc95759c9083dc80645555c441bc63581dd57a46")]
 [assembly: System.Reflection.AssemblyProductAttribute("MutluSporSalonu")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MutluSporSalonu")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

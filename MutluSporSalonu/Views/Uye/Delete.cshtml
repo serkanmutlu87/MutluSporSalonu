@@ -1,35 +1,72 @@
 ﻿@model MutluSporSalonu.Models.Uye
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Üyeyi Sil";
+    var isAdmin = User.IsInRole("Admin");
+    int currentUserId = 0;
+
+    if (!isAdmin && User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out currentUserId);
+    }
+
+    var isOwnAccount = isAdmin || (currentUserId != 0 && currentUserId == Model.UyeID);
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4 text-danger">Üyeyi Sil</h2>
 
-    <div class="alert alert-warning">
-        <strong>Dikkat!</strong> Aşağıdaki üyeyi silmek üzeresiniz. Bu işlem geri alınamaz!
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4 class="card-title">@Model.UyeAdSoyad</h4>
-
-            <p class="card-text">
-                <strong>E-posta:</strong> @Model.UyeEposta <br />
-                <strong>Telefon:</strong> @(string.IsNullOrWhiteSpace(Model.UyeTelefon) ? "-" : Model.UyeTelefon) <br />
-                <strong>Rol:</strong> @Model.Rol <br />
-                <strong>Kayıt Tarihi:</strong> @Model.KayitTarihi.ToString("dd.MM.yyyy")
-            </p>
+    @if (!isOwnAccount)
+    {
+        <div class="alert alert-danger">
+            Bu işlem için yetkiniz yok. Sadece kendi hesabınızı silebilirsiniz.
         </div>
-    </div>
 
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="UyeID" />
+        <a asp-action="Details" asp-route-id="@currentUserId" class="btn btn-secondary">Geri Dön</a>
+    }
+    else
+    {
+        <h2 class="mb-4 text-danger">Üyeyi Sil</h2>
 
-        <div class="d-flex justify-content-between">
-            <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
-            <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <div class="alert alert-warning">
+            <strong>Dikkat!</strong> Aşağıdaki üyeyi silmek üzeresiniz. Bu işlem geri alınamaz!
         </div>
-    </form>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title">@Model.UyeAdSoyad</h4>
+
+                <p class="card-text">
+                    <strong>E-posta:</strong> @Model.UyeEposta <br />
+                    <strong>Telefon:</strong> @(string.IsNullOrWhiteSpace(Model.UyeTelefon) ? "-" : Model.UyeTelefon) <br />
+
+                    @* Rol bilgisini sadece Admin görsün (istersen tamamen kaldırabiliriz) *@
+                    @if (isAdmin)
+                    {
+                        <strong>Rol:</strong> @Model.Rol <br />
+                    }
+
+                    <strong>Kayıt Tarihi:</strong> @Model.KayitTarihi.ToString("dd.MM.yyyy")
+                </p>
+            </div>
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="UyeID" />
+
+            <div class="d-flex justify-content-between">
+                @if (isAdmin)
+                {
+                    <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@Model.UyeID" class="btn btn-secondary">Vazgeç</a>
+                }
+
+                <button type="submit" class="btn btn-danger">Evet, Sil</button>
+            </div>
+        </form>
+    }
+
 </div>

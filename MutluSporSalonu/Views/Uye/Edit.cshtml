@@ -1,59 +1,95 @@
 ﻿@model MutluSporSalonu.Models.Uye
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Üye Düzenle";
+
+    var isAdmin = User.IsInRole("Admin");
+    int currentUserId = 0;
+
+    if (!isAdmin && User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out currentUserId);
+    }
+
+    var isOwnAccount = isAdmin || (currentUserId != 0 && currentUserId == Model.UyeID);
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Üye Düzenle</h2>
 
-    <form asp-action="Edir" method="post" class="row g-3">
-
-        <input type="hidden" asp-for="UyeID" />
-
-        <div class="col-md-6">
-            <label asp-for="UyeAdSoyad" class="form-label"></label>
-            <input asp-for="UyeAdSoyad" class="form-control" />
-            <span asp-validation-for="UyeAdSoyad" class="text-danger"></span>
+    @if (!isOwnAccount)
+    {
+        <div class="alert alert-danger">
+            Bu işlem için yetkiniz yok. Sadece kendi hesabınızı düzenleyebilirsiniz.
         </div>
 
-        <div class="col-md-6">
-            <label asp-for="UyeEposta" class="form-label"></label>
-            <input asp-for="UyeEposta" class="form-control" />
-            <span asp-validation-for="UyeEposta" class="text-danger"></span>
-        </div>
-
-        <div class="col-md-6">
-            <label asp-for="UyeSifre" class="form-label"></label>
-            <input asp-for="UyeSifre" class="form-control" />
-            <span asp-validation-for="UyeSifre" class="text-danger"></span>
-        </div>
-
-        <div class="col-md-6">
-            <label asp-for="UyeTelefon" class="form-label"></label>
-            <input asp-for="UyeTelefon" class="form-control" />
-            <span asp-validation-for="UyeTelefon" class="text-danger"></span>
-        </div>
-
-        <div class="col-md-4">
-            <label asp-for="Rol" class="form-label"></label>
-            <select asp-for="Rol" class="form-select">
-                <option value="Uye">Üye</option>
-                <option value="Admin">Admin</option>
-            </select>
-            <span asp-validation-for="Rol" class="text-danger"></span>
-        </div>
-
-        <div class="col-12 d-flex justify-content-between mt-3">
-            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
-            <button type="submit" class="btn btn-warning">Güncelle</button>
-        </div>
-
-    </form>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Ana Sayfaya Dön</a>
     }
-}
+    else
+    {
+        <h2 class="mb-4">Üye Düzenle</h2>
+
+        <form asp-action="Edit" method="post" class="row g-3">
+
+            <input type="hidden" asp-for="UyeID" />
+
+            <div class="col-md-6">
+                <label asp-for="UyeAdSoyad" class="form-label"></label>
+                <input asp-for="UyeAdSoyad" class="form-control" />
+                <span asp-validation-for="UyeAdSoyad" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="UyeEposta" class="form-label"></label>
+                <input asp-for="UyeEposta" class="form-control" />
+                <span asp-validation-for="UyeEposta" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="UyeSifre" class="form-label"></label>
+                <input asp-for="UyeSifre" class="form-control" type="password" />
+                <span asp-validation-for="UyeSifre" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="UyeTelefon" class="form-label"></label>
+                <input asp-for="UyeTelefon" class="form-control" />
+                <span asp-validation-for="UyeTelefon" class="text-danger"></span>
+            </div>
+
+            @* ✅ Rol sadece Admin'e açık *@
+            @if (isAdmin)
+            {
+                <div class="col-md-4">
+                    <label asp-for="Rol" class="form-label"></label>
+                    <select asp-for="Rol" class="form-select">
+                        <option value="Uye">Üye</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                    <span asp-validation-for="Rol" class="text-danger"></span>
+                </div>
+            }
+
+            <div class="col-12 d-flex justify-content-between mt-3">
+                @if (isAdmin)
+                {
+                    <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@Model.UyeID" class="btn btn-secondary">Geri Dön</a>
+                }
+
+                <button type="submit" class="btn btn-warning">Güncelle</button>
+            </div>
+
+        </form>
+
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }
+    }
+
+</div>

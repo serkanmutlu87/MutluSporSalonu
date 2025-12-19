@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MutluSporSalonu.Models
 {
@@ -38,6 +39,7 @@ namespace MutluSporSalonu.Models
         // İlişkiler
         [Display(Name = "Bağlı Olduğu Spor Salonu")]
         public int SalonID { get; set; }
+        [ForeignKey(nameof(SalonID))]
         public SporSalonu? SporSalonu { get; set; }
 
         [Display(Name = "Verebildiği Hizmetler")]

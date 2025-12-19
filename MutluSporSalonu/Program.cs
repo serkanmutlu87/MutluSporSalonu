@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MutluSporSalonu.Models;
 
@@ -9,6 +10,22 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Hesap/Giris";
+        options.AccessDeniedPath = "/Hesap/Giris";
+        options.Cookie.Name = ".AspNetCore.Cookies";
+
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.HttpOnly = true;
+    });
+
+
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -26,6 +43,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

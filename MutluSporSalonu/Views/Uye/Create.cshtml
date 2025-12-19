@@ -26,7 +26,7 @@
 
                 <div class="col-md-6">
                     <label asp-for="UyeSifre" class="form-label"></label>
-                    <input asp-for="UyeSifre" class="form-control" />
+                    <input asp-for="UyeSifre" class="form-control" type="password" />
                     <span asp-validation-for="UyeSifre" class="text-danger"></span>
                 </div>
 
@@ -36,7 +36,7 @@
                     <span asp-validation-for="UyeTelefon" class="text-danger"></span>
                 </div>
 
-                <input type="hidden" asp-for="Rol" />
+                @* ❌ Rol hidden alanını kaldırdık *@
 
                 <div class="col-12 mt-3 d-flex justify-content-end">
                     <button type="submit" class="btn btn-success">

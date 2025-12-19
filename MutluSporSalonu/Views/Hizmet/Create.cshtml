@@ -2,12 +2,25 @@
 
 @{
     ViewData["Title"] = "Yeni Hizmet Ekle";
+    bool adminMi = User.IsInRole("Admin");
+}
+
+@if (!adminMi)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            Bu sayfaya erişim yetkiniz yok.
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+    return;
 }
 
 <div class="container mt-4">
     <h2 class="mb-4">Yeni Hizmet Ekle</h2>
 
     <form asp-action="Create" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
 
         <div class="col-md-6">
             <label asp-for="HizmetAdi" class="form-label"></label>
@@ -45,7 +58,6 @@
             <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
             <button type="submit" class="btn btn-success">Kaydet</button>
         </div>
-
     </form>
 </div>
 

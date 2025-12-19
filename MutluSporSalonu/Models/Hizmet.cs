@@ -29,6 +29,7 @@ namespace MutluSporSalonu.Models
         // İlişkiler
         [Display(Name = "Spor Salonları")]
         public int SalonID { get; set; }
+        [ForeignKey(nameof(SalonID))]
         public SporSalonu? SporSalonu { get; set; }
 
         [Display(Name = "Bu Hizmeti Verebilen Antrenörler")]

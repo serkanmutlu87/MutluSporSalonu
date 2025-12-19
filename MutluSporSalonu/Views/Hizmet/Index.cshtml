@@ -2,21 +2,29 @@
 
 @{
     ViewData["Title"] = "Hizmetler";
+    bool adminMi = User.IsInRole("Admin");
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Hizmetler</h2>
-        <a asp-action="Create" class="btn btn-primary">
-            Hizmet Ekle
-        </a>
+
+        @if (adminMi)
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                Hizmet Ekle
+            </a>
+        }
     </div>
 
     @if (Model == null || !Model.Any())
     {
         <div class="alert alert-info">
             Sistemde tanımlı hizmet bulunmamaktadır.
-            <a asp-action="Create">Yeni hizmet eklemek için tıklayın.</a>
+            @if (adminMi)
+            {
+                <a asp-action="Create">Yeni hizmet eklemek için tıklayın.</a>
+            }
         </div>
     }
     else
@@ -28,7 +36,7 @@
                     <th>Süre (dk)</th>
                     <th>Ücret (₺)</th>
                     <th>Salon</th>
-                    <th style="width: 190px;">İşlemler</th>
+                    <th style="width:@(adminMi ? "190px" : "90px");">İşlemler</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,12 +52,16 @@
                                 <a asp-action="Details" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-info">
                                     Detay
                                 </a>
-                                <a asp-action="Edit" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-warning">
-                                    Düzenle
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-danger">
-                                    Sil
-                                </a>
+
+                                @if (adminMi)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-warning">
+                                        Düzenle
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-danger">
+                                        Sil
+                                    </a>
+                                }
                             </div>
                         </td>
                     </tr>

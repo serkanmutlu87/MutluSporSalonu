@@ -2,63 +2,77 @@
 
 @{
     ViewData["Title"] = "Yeni Antrenör Ekle";
+    bool adminMi = User?.IsInRole("Admin") ?? false;
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Yeni Antrenör Ekle</h2>
 
-    <form asp-action="Create" method="post" class="row g-3">
-
-        <div class="col-md-6">
-            <label asp-for="AntrenorAdSoyad" class="form-label"></label>
-            <input asp-for="AntrenorAdSoyad" class="form-control" />
-            <span asp-validation-for="AntrenorAdSoyad" class="text-danger"></span>
+    @if (!adminMi)
+    {
+        <div class="alert alert-danger">
+            <strong>Yetkisiz erişim!</strong><br />
+            Antrenör ekleme işlemi sadece <strong>Admin</strong> kullanıcılar tarafından yapılabilir.
         </div>
 
-        <div class="col-md-6">
-            <label asp-for="AntrenorUzmanlikAlanlari" class="form-label"></label>
-            <input asp-for="AntrenorUzmanlikAlanlari" class="form-control" />
-            <span asp-validation-for="AntrenorUzmanlikAlanlari" class="text-danger"></span>
-            <small class="text-muted">Örn: Kas Geliştirme, Fitness, Yoga</small>
-        </div>
+        <a asp-action="Index" class="btn btn-secondary mt-3">Geri Dön</a>
+    }
+    else
+    {
+        <h2 class="mb-4">Yeni Antrenör Ekle</h2>
 
-        <div class="col-md-4">
-            <label asp-for="AntrenorTelefon" class="form-label"></label>
-            <input asp-for="AntrenorTelefon" class="form-control" />
-            <span asp-validation-for="AntrenorTelefon" class="text-danger"></span>
-        </div>
+        <form asp-action="Create" method="post" class="row g-3">
 
-        <div class="col-md-4">
-            <label asp-for="AntrenorEposta" class="form-label"></label>
-            <input asp-for="AntrenorEposta" class="form-control" />
-            <span asp-validation-for="AntrenorEposta" class="text-danger"></span>
-        </div>
+            <div class="col-md-6">
+                <label asp-for="AntrenorAdSoyad" class="form-label"></label>
+                <input asp-for="AntrenorAdSoyad" class="form-control" />
+                <span asp-validation-for="AntrenorAdSoyad" class="text-danger"></span>
+            </div>
 
-        <div class="col-md-4">
-            <label asp-for="SalonID" class="form-label">Spor Salonu</label>
-            <select asp-for="SalonID" asp-items="ViewBag.SalonID" class="form-select">
-                <option value="">-- Seçiniz --</option>
-            </select>
-            <span asp-validation-for="SalonID" class="text-danger"></span>
-        </div>
+            <div class="col-md-6">
+                <label asp-for="AntrenorUzmanlikAlanlari" class="form-label"></label>
+                <input asp-for="AntrenorUzmanlikAlanlari" class="form-control" />
+                <span asp-validation-for="AntrenorUzmanlikAlanlari" class="text-danger"></span>
+                <small class="text-muted">Örn: Kas Geliştirme, Fitness, Yoga</small>
+            </div>
 
-        <div class="col-md-3">
-            <label asp-for="AntrenorMusaitlikBaslangic" class="form-label"></label>
-            <input asp-for="AntrenorMusaitlikBaslangic" class="form-control" type="time" />
-            <span asp-validation-for="AntrenorMusaitlikBaslangic" class="text-danger"></span>
-        </div>
+            <div class="col-md-4">
+                <label asp-for="AntrenorTelefon" class="form-label"></label>
+                <input asp-for="AntrenorTelefon" class="form-control" />
+                <span asp-validation-for="AntrenorTelefon" class="text-danger"></span>
+            </div>
 
-        <div class="col-md-3">
-            <label asp-for="AntrenorMusaitlikBitis" class="form-label"></label>
-            <input asp-for="AntrenorMusaitlikBitis" class="form-control" type="time" />
-            <span asp-validation-for="AntrenorMusaitlikBitis" class="text-danger"></span>
-        </div>
+            <div class="col-md-4">
+                <label asp-for="AntrenorEposta" class="form-label"></label>
+                <input asp-for="AntrenorEposta" class="form-control" />
+                <span asp-validation-for="AntrenorEposta" class="text-danger"></span>
+            </div>
 
-        <div class="col-12 d-flex justify-content-between mt-3">
-            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
-            <button type="submit" class="btn btn-success">Kaydet</button>
-        </div>
-    </form>
+            <div class="col-md-4">
+                <label asp-for="SalonID" class="form-label">Spor Salonu</label>
+                <select asp-for="SalonID" asp-items="ViewBag.SalonID" class="form-select">
+                    <option value="">-- Seçiniz --</option>
+                </select>
+                <span asp-validation-for="SalonID" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="AntrenorMusaitlikBaslangic" class="form-label"></label>
+                <input asp-for="AntrenorMusaitlikBaslangic" class="form-control" type="time" />
+                <span asp-validation-for="AntrenorMusaitlikBaslangic" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="AntrenorMusaitlikBitis" class="form-label"></label>
+                <input asp-for="AntrenorMusaitlikBitis" class="form-control" type="time" />
+                <span asp-validation-for="AntrenorMusaitlikBitis" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 d-flex justify-content-between mt-3">
+                <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+                <button type="submit" class="btn btn-success">Kaydet</button>
+            </div>
+        </form>
+    }
 </div>
 
 @section Scripts {

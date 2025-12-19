@@ -1,6 +1,22 @@
 ﻿@model MutluSporSalonu.Models.Hizmet
 
 @{
+    bool adminMi = User.IsInRole("Admin");
+}
+
+@if (!adminMi)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            Bu sayfaya erişim yetkiniz yok.
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+    return;
+}
+
+
+@{
     ViewData["Title"] = "Hizmeti Sil";
 }
 

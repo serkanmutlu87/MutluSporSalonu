@@ -8,12 +8,15 @@
     <h2 class="mb-4">Randevu Düzenle</h2>
 
     <form asp-action="Edit" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
         <input type="hidden" asp-for="RandevuID" />
 
         <div class="col-md-4">
             <label class="form-label">Üye</label>
-            <select asp-for="UyeID" asp-items="ViewBag.Uyeler" class="form-select">
+            <select asp-for="UyeID" asp-items="ViewBag.Uyeler" class="form-select" id="uyeSecim">
                 <option value="">-- Üye Seçiniz --</option>
             </select>
             <span asp-validation-for="UyeID" class="text-danger"></span>
@@ -21,7 +24,7 @@
 
         <div class="col-md-4">
             <label class="form-label">Antrenör</label>
-            <select asp-for="AntrenorID" asp-items="ViewBag.Antrenorler" class="form-select">
+            <select asp-for="AntrenorID" asp-items="ViewBag.Antrenorler" class="form-select" id="antrenorSecim">
                 <option value="">-- Antrenör Seçiniz --</option>
             </select>
             <span asp-validation-for="AntrenorID" class="text-danger"></span>
@@ -29,7 +32,7 @@
 
         <div class="col-md-4">
             <label class="form-label">Hizmet</label>
-            <select asp-for="HizmetID" asp-items="ViewBag.Hizmetler" class="form-select">
+            <select asp-for="HizmetID" asp-items="ViewBag.Hizmetler" class="form-select" id="hizmetSecim">
                 <option value="">-- Hizmet Seçiniz --</option>
             </select>
             <span asp-validation-for="HizmetID" class="text-danger"></span>
@@ -37,7 +40,7 @@
 
         <div class="col-md-4">
             <label asp-for="SalonID" class="form-label">Salon</label>
-            <select asp-for="SalonID" asp-items="ViewBag.SporSalonlari" class="form-select">
+            <select asp-for="SalonID" asp-items="ViewBag.SporSalonlari" class="form-select" id="salonSecim">
                 <option value="">-- Salon Seçiniz --</option>
             </select>
             <span asp-validation-for="SalonID" class="text-danger"></span>
@@ -51,13 +54,13 @@
 
         <div class="col-md-2">
             <label asp-for="RandevuBaslangicSaati" class="form-label">Başlangıç</label>
-            <input asp-for="RandevuBaslangicSaati" class="form-control" type="time" />
+            <input asp-for="RandevuBaslangicSaati" class="form-control" type="time" id="baslangicSaat" />
             <span asp-validation-for="RandevuBaslangicSaati" class="text-danger"></span>
         </div>
 
         <div class="col-md-2">
             <label asp-for="RandevuBitisSaati" class="form-label">Bitiş</label>
-            <input asp-for="RandevuBitisSaati" class="form-control" type="time" />
+            <input asp-for="RandevuBitisSaati" class="form-control" type="time" id="bitisSaat" />
             <span asp-validation-for="RandevuBitisSaati" class="text-danger"></span>
         </div>
 
@@ -69,13 +72,31 @@
         </div>
 
         <div class="col-md-4">
-            <label asp-for="RandevuOnaylandiMi" class="form-label">Onay Durumu</label>
-            <select asp-for="RandevuOnaylandiMi" class="form-select">
-                <option value="false">Beklemede</option>
-                <option value="true">Onaylandı</option>
-            </select>
+            <label class="form-label">Onay Durumu</label>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <!-- Admin: değiştirebilir -->
+                <select asp-for="RandevuOnaylandiMi" class="form-select">
+                    <option value="false">Beklemede</option>
+                    <option value="true">Onaylandı</option>
+                </select>
+            }
+            else
+            {
+                <!-- Normal Üye: sadece görür -->
+                <input type="text"
+                       class="form-control"
+                       value="@(Model.RandevuOnaylandiMi ? "Onaylandı" : "Beklemede")"
+                       disabled />
+
+                <!-- model binding bozulmasın diye -->
+                <input type="hidden" asp-for="RandevuOnaylandiMi" />
+            }
+
             <span asp-validation-for="RandevuOnaylandiMi" class="text-danger"></span>
         </div>
+
 
         <div class="col-12">
             <label asp-for="RandevuAciklama" class="form-label"></label>
@@ -95,4 +116,62 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        const antrenorSel = document.getElementById("antrenorSecim");
+        const hizmetSel = document.getElementById("hizmetSecim");
+        const salonSel = document.getElementById("salonSecim");
+
+        function fillSelect(selectEl, items, placeholder) {
+            const current = selectEl.value;
+
+            selectEl.innerHTML = "";
+            const opt0 = document.createElement("option");
+            opt0.value = "";
+            opt0.textContent = placeholder;
+            selectEl.appendChild(opt0);
+
+            (items || []).forEach(i => {
+                const opt = document.createElement("option");
+                opt.value = i.id;
+                opt.textContent = i.name;
+                selectEl.appendChild(opt);
+            });
+
+            if ([...selectEl.options].some(o => o.value === current)) {
+                selectEl.value = current;
+            }
+        }
+
+        async function onAntrenorChanged() {
+            const id = antrenorSel.value;
+            if (!id) return;
+
+            const res = await fetch(`/Randevu/GetOptionsByAntrenor?antrenorId=${id}`);
+            const data = await res.json();
+
+            fillSelect(salonSel, data.salons, "-- Salon Seçiniz --");
+            fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
+        }
+
+        async function onSalonChanged() {
+            const id = salonSel.value;
+            if (!id) return;
+
+            const res = await fetch(`/Randevu/GetOptionsBySalon?salonId=${id}`);
+            const data = await res.json();
+
+            fillSelect(antrenorSel, data.antrenorler, "-- Antrenör Seçiniz --");
+            fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
+        }
+
+        antrenorSel?.addEventListener("change", onAntrenorChanged);
+        salonSel?.addEventListener("change", onSalonChanged);
+
+        window.addEventListener("load", () => {
+            // Edit ekranında seçimler zaten dolu olacağı için otomatik uygula
+            if (antrenorSel?.value) onAntrenorChanged();
+            else if (salonSel?.value) onSalonChanged();
+        });
+    </script>
 }

@@ -2,6 +2,18 @@
 
 @{
     ViewData["Title"] = "Antrenör Düzenle";
+    bool adminMi = User?.IsInRole("Admin") ?? false;
+}
+
+@if (!adminMi)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            Bu sayfaya erişim yetkiniz yok.
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+    return;
 }
 
 <div class="container mt-4">

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +9,7 @@ using MutluSporSalonu.Models;
 
 namespace MutluSporSalonu.Controllers
 {
+    [Authorize] // giriş zorunlu olsun (istersen kaldır)
     public class AntrenorController : Controller
     {
         private readonly DBContext _context;
@@ -18,7 +19,7 @@ namespace MutluSporSalonu.Controllers
             _context = context;
         }
 
-        // GET: Antrenor
+        // GET: Antrenor  (Admin + Üye görebilir)
         public async Task<IActionResult> Index()
         {
             var antrenorler = await _context.Antrenorler
@@ -28,26 +29,23 @@ namespace MutluSporSalonu.Controllers
             return View(antrenorler);
         }
 
-        // GET: Antrenor/Details/5
+        // GET: Antrenor/Details/5  (Admin + Üye görebilir)
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var antrenor = await _context.Antrenorler
                 .Include(a => a.SporSalonu)
+                .Include(a => a.Hizmetler)
                 .FirstOrDefaultAsync(m => m.AntrenorID == id);
-            if (antrenor == null)
-            {
-                return NotFound();
-            }
+
+            if (antrenor == null) return NotFound();
 
             return View(antrenor);
         }
 
-        // GET: Antrenor/Create
+        // GET: Antrenor/Create  (SADECE ADMIN)
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi");
@@ -55,11 +53,10 @@ namespace MutluSporSalonu.Controllers
             return View();
         }
 
-        // POST: Antrenor/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Antrenor/Create  (SADECE ADMIN)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("AntrenorID,AntrenorAdSoyad,AntrenorUzmanlikAlanlari,AntrenorTelefon,AntrenorEposta,AntrenorMusaitlikBaslangic,AntrenorMusaitlikBitis,SalonID")] Antrenor antrenor)
         {
             if (ModelState.IsValid)
@@ -68,40 +65,33 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.SalonID = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
-            ViewBag.HizmetID = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
-            return View(antrenor);
-        }
 
-        // GET: Antrenor/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var antrenor = await _context.Antrenorler.FindAsync(id);
-            if (antrenor == null)
-            {
-                return NotFound();
-            }
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
             ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View(antrenor);
         }
 
-        // POST: Antrenor/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: Antrenor/Edit/5  (SADECE ADMIN)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var antrenor = await _context.Antrenorler.FindAsync(id);
+            if (antrenor == null) return NotFound();
+
+            ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
+            ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
+            return View(antrenor);
+        }
+
+        // POST: Antrenor/Edit/5  (SADECE ADMIN)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("AntrenorID,AntrenorAdSoyad,AntrenorUzmanlikAlanlari,AntrenorTelefon,AntrenorEposta,AntrenorMusaitlikBaslangic,AntrenorMusaitlikBitis,SalonID")] Antrenor antrenor)
         {
-            if (id != antrenor.AntrenorID)
-            {
-                return NotFound();
-            }
+            if (id != antrenor.AntrenorID) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -109,57 +99,49 @@ namespace MutluSporSalonu.Controllers
                 {
                     _context.Update(antrenor);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AntrenorExists(antrenor.AntrenorID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!AntrenorExists(antrenor.AntrenorID)) return NotFound();
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
+
             ViewData["SalonID"] = new SelectList(_context.Salonlar, "SalonID", "SalonAdi", antrenor.SalonID);
             ViewData["HizmetID"] = new SelectList(_context.Hizmetler, "HizmetID", "HizmetAdi");
             return View(antrenor);
         }
 
-        // GET: Antrenor/Delete/5
+        // GET: Antrenor/Delete/5  (SADECE ADMIN)
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var antrenor = await _context.Antrenorler
                 .Include(a => a.SporSalonu)
                 .Include(a => a.Hizmetler)
                 .FirstOrDefaultAsync(m => m.AntrenorID == id);
-            if (antrenor == null)
-            {
-                return NotFound();
-            }
+
+            if (antrenor == null) return NotFound();
 
             return View(antrenor);
         }
 
-        // POST: Antrenor/Delete/5
+        // POST: Antrenor/Delete/5  (SADECE ADMIN)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var antrenor = await _context.Antrenorler.FindAsync(id);
             if (antrenor != null)
             {
                 _context.Antrenorler.Remove(antrenor);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

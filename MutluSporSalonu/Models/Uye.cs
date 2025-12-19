@@ -18,7 +18,7 @@ namespace MutluSporSalonu.Models
         public string UyeEposta { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Şifre zorunludur.")]
-        [StringLength(100, MinimumLength = 4, ErrorMessage = "Şifre en az 4 karakter olmalıdır.")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Şifre en az 3 karakter olmalıdır.")]
         [DataType(DataType.Password)]
         [Display(Name = "Şifre")]
         public string UyeSifre { get; set; } = string.Empty;

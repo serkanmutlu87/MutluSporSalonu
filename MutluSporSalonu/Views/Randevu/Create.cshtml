@@ -8,10 +8,13 @@
     <h2 class="mb-4">Yeni Randevu Oluştur</h2>
 
     <form asp-action="Create" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
         <div class="col-md-4">
             <label class="form-label">Üye</label>
-            <select asp-for="UyeID" asp-items="ViewBag.Uyeler" class="form-select">
+            <select asp-for="UyeID" asp-items="ViewBag.Uyeler" class="form-select" id="uyeSecim">
                 <option value="">-- Üye Seçiniz --</option>
             </select>
             <span asp-validation-for="UyeID" class="text-danger"></span>
@@ -35,7 +38,7 @@
 
         <div class="col-md-4">
             <label asp-for="SalonID" class="form-label">Salon</label>
-            <select asp-for="SalonID" asp-items="ViewBag.SporSalonlari" class="form-select">
+            <select asp-for="SalonID" asp-items="ViewBag.SporSalonlari" class="form-select" id="salonSecim">
                 <option value="">-- Salon Seçiniz --</option>
             </select>
             <span asp-validation-for="SalonID" class="text-danger"></span>
@@ -73,26 +76,86 @@
     }
 
     <script>
-        // Hizmet süresine göre bitiş saati otomatik hesaplama
-        @*var hizmetSureleri = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
-            ((SelectList)ViewBag.Hizmetler).Items
-        ));*@
+        // -----------------------------
+        // 1) Dependent dropdown helper
+        // -----------------------------
+        const antrenorSel = document.getElementById("antrenorSecim");
+        const hizmetSel = document.getElementById("hizmetSecim");
+        const salonSel = document.getElementById("salonSecim");
 
+        function fillSelect(selectEl, items, placeholder) {
+            const current = selectEl.value;
+
+            selectEl.innerHTML = "";
+            const opt0 = document.createElement("option");
+            opt0.value = "";
+            opt0.textContent = placeholder;
+            selectEl.appendChild(opt0);
+
+            (items || []).forEach(i => {
+                const opt = document.createElement("option");
+                opt.value = i.id;
+                opt.textContent = i.name;
+                selectEl.appendChild(opt);
+            });
+
+            // önceki seçim hâlâ varsa koru
+            if ([...selectEl.options].some(o => o.value === current)) {
+                selectEl.value = current;
+            }
+        }
+
+        async function onAntrenorChanged() {
+            const id = antrenorSel.value;
+            if (!id) return;
+
+            const res = await fetch(`/Randevu/GetOptionsByAntrenor?antrenorId=${id}`);
+            const data = await res.json();
+
+            // Antrenör seçildi -> salon + hizmet filtrelenir
+            fillSelect(salonSel, data.salons, "-- Salon Seçiniz --");
+            fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
+        }
+
+        async function onSalonChanged() {
+            const id = salonSel.value;
+            if (!id) return;
+
+            const res = await fetch(`/Randevu/GetOptionsBySalon?salonId=${id}`);
+            const data = await res.json();
+
+            // Salon seçildi -> antrenör + hizmet filtrelenir
+            fillSelect(antrenorSel, data.antrenorler, "-- Antrenör Seçiniz --");
+            fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
+        }
+
+        antrenorSel?.addEventListener("change", onAntrenorChanged);
+        salonSel?.addEventListener("change", onSalonChanged);
+
+        // sayfa açılınca (edit gibi durumlarda) seçili değer varsa uygula
+        window.addEventListener("load", () => {
+            if (antrenorSel?.value) onAntrenorChanged();
+            else if (salonSel?.value) onSalonChanged();
+        });
+
+        // -----------------------------
+        // 2) Hizmet süresine göre bitiş saati otomatik hesaplama
+        // (Senin mevcut kodun korunuyor)
+        // -----------------------------
         document.getElementById("hizmetSecim").addEventListener("change", function () {
             var secilenId = this.value;
+            if (!secilenId) return;
 
-            // Hizmet süresi bul
-            fetch('/Api/HizmetApi/' + secilenId) // API eklediğimizde çalışacak
+            fetch('/Api/HizmetApi/' + secilenId)
                 .then(r => r.json())
                 .then(data => {
                     window.hizmetSuresi = data.sure;
-                });
+                })
+                .catch(() => { window.hizmetSuresi = null; });
         });
 
-        // Başlangıç saati girildiğinde otomatik olarak bitişi hesapla
         document.getElementById("baslangicSaat").addEventListener("input", function () {
-            if (!window.hizmetSuresi)
-                return;
+            if (!window.hizmetSuresi) return;
 
             var bas = this.value;
             if (!bas) return;
