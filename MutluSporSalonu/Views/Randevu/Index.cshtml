@@ -1,10 +1,24 @@
-﻿@model IEnumerable<MutluSporSalonu.Models.Randevu>
+﻿@*
+@file        Index.cshtml
+@description Randevu listeleme ekranıdır.
+             Sayfanın üst kısmında, seçilen tarih/saat aralığına göre uygun antrenörleri
+             listeleyen bir API demo alanı bulunur (GET /api/antrenor/uygun).
+             Alt kısımda ise randevular tablo halinde listelenir; Admin kullanıcılar bekleyen
+             randevuları "Onayla" butonu ile onaylayabilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model IEnumerable<MutluSporSalonu.Models.Randevu>
 
 @{
     ViewData["Title"] = "Randevular";
 }
 
 <div class="container mt-4">
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Randevular</h2>
         <a asp-action="Create" class="btn btn-primary">
@@ -12,6 +26,71 @@
         </a>
     </div>
 
+    <!-- ============================ -->
+    <!-- API ile Uygun Antrenör Bul -->
+    <!-- ============================ -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            API ile Uygun Antrenör Bul
+        </div>
+
+        <div class="card-body">
+            <p class="text-muted mb-3">
+                Seçtiğiniz tarih ve saat aralığına göre <strong>/api/antrenor/uygun</strong> endpoint’i çağrılır
+                ve müsait antrenörler listelenir.
+            </p>
+
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Tarih</label>
+                    <input type="date" class="form-control" id="uygunTarih" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Başlangıç</label>
+                    <input type="time" class="form-control" id="uygunBaslangic" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Bitiş</label>
+                    <input type="time" class="form-control" id="uygunBitis" />
+                </div>
+
+                <div class="col-md-2 d-grid">
+                    <button type="button" class="btn btn-primary" id="btnUygunBul">
+                        Listele
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <div id="uygunDurum" class="small text-muted"></div>
+            </div>
+
+            <div class="mt-3" id="uygunSonucAlan" style="display:none;">
+                <h6 class="mb-2">Uygun Antrenörler</h6>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Antrenör</th>
+                                <th>Uzmanlık</th>
+                                <th>Salon</th>
+                                <th>Müsaitlik</th>
+                            </tr>
+                        </thead>
+                        <tbody id="uygunTbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ -->
+    <!-- Randevu Tablosu -->
+    <!-- ============================ -->
     @if (Model == null || !Model.Any())
     {
         <div class="alert alert-info">
@@ -72,18 +151,19 @@
                                     Sil
                                 </a>
 
+                                @* Admin: sadece bekleyen randevular için onay butonu gösterilir *@
                                 @if (User.IsInRole("Admin") && !r.RandevuOnaylandiMi)
                                 {
                                     <form asp-action="Onayla"
                                           asp-route-id="@r.RandevuID"
                                           method="post"
                                           class="d-inline">
+                                        @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-sm btn-success">
                                             Onayla
                                         </button>
                                     </form>
                                 }
-
                             </div>
                         </td>
                     </tr>
@@ -91,4 +171,105 @@
             </tbody>
         </table>
     }
+
 </div>
+
+@section Scripts {
+    <script>
+        const btn = document.getElementById("btnUygunBul");
+        const durum = document.getElementById("uygunDurum");
+        const alan = document.getElementById("uygunSonucAlan");
+        const tbody = document.getElementById("uygunTbody");
+
+        const tarihEl = document.getElementById("uygunTarih");
+        const basEl = document.getElementById("uygunBaslangic");
+        const bitEl = document.getElementById("uygunBitis");
+
+        // Sayfa ilk açıldığında tarih input'una bugünün tarihini yazar (kullanım kolaylığı)
+        (function setDefaultDate() {
+            const d = new Date();
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            if (tarihEl) tarihEl.value = `${yyyy}-${mm}-${dd}`;
+        })();
+
+        function temizleTablo() {
+            tbody.innerHTML = "";
+        }
+
+        function hataYaz(metin) {
+            durum.innerText = metin;
+            alan.style.display = "none";
+            temizleTablo();
+        }
+
+        btn.addEventListener("click", async () => {
+            const tarih = tarihEl.value;
+            const bas = basEl.value;
+            const bit = bitEl.value;
+
+            // Basit client-side doğrulama (boş / saat aralığı kontrolü)
+            if (!tarih || !bas || !bit) {
+                hataYaz("Lütfen tarih, başlangıç ve bitiş saatini gir.");
+                return;
+            }
+            if (bas >= bit) {
+                hataYaz("Başlangıç saati bitiş saatinden küçük olmalı.");
+                return;
+            }
+
+            durum.innerText = "API çağrısı yapılıyor...";
+            alan.style.display = "none";
+            temizleTablo();
+
+            // NOT: Endpoint route projende farklıysa bu URL'yi güncelle.
+            const url = `/api/antrenor/uygun?tarih=${encodeURIComponent(tarih)}&baslangic=${encodeURIComponent(bas)}&bitis=${encodeURIComponent(bit)}`;
+
+            try {
+                const res = await fetch(url);
+                const text = await res.text();
+
+                // API hata dönerse (örn. 400/404/500) ekrana ham mesajı basıyoruz
+                if (!res.ok) {
+                    hataYaz(`Hata: ${text}`);
+                    return;
+                }
+
+                const data = JSON.parse(text);
+
+                if (!data || data.length === 0) {
+                    durum.innerText = "Bu tarih/saat aralığında uygun antrenör bulunamadı.";
+                    alan.style.display = "none";
+                    return;
+                }
+
+                for (const a of data) {
+                    const tr = document.createElement("tr");
+
+                    // API alan isimleri değişirse kırılmasın diye esnek okuma
+                    const ad = a.antrenorAdSoyad ?? a.AntrenorAdSoyad ?? a.name ?? "-";
+                    const uzm = a.antrenorUzmanlikAlanlari ?? a.AntrenorUzmanlikAlanlari ?? a.uzmanlikAlanlari ?? "-";
+                    const salon = a.salonAdi ?? a.SalonAdi ?? "-";
+                    const mus1 = a.musaitlikBaslangic ?? a.MusaitlikBaslangic ?? "-";
+                    const mus2 = a.musaitlikBitis ?? a.MusaitlikBitis ?? "-";
+
+                    tr.innerHTML = `
+                        <td>${ad}</td>
+                        <td>${uzm}</td>
+                        <td>${salon}</td>
+                        <td>${mus1} - ${mus2}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+
+                durum.innerText = `${data.length} uygun antrenör bulundu.`;
+                alan.style.display = "block";
+
+            } catch (e) {
+                console.error(e);
+                hataYaz("API çağrısı başarısız. Console'u kontrol et.");
+            }
+        });
+    </script>
+}

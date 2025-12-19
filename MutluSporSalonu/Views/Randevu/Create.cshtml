@@ -1,4 +1,17 @@
-﻿@model MutluSporSalonu.Models.Randevu
+﻿@*
+@file        Create.cshtml
+@description Yeni randevu oluşturma ekranıdır.
+             Form verileri RandevuController içindeki Create action'ına gönderilir.
+             Antrenör/Salon seçimine göre bağımlı dropdown'lar (fetch ile) filtrelenir.
+             Hizmet seçimine göre hizmet süresi API'den çekilerek bitiş saati otomatik hesaplanır.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Randevu
 
 @{
     ViewData["Title"] = "Yeni Randevu Oluştur";
@@ -76,13 +89,12 @@
     }
 
     <script>
-        // -----------------------------
-        // 1) Dependent dropdown helper
-        // -----------------------------
+        // Antrenör/Salon seçimine göre diğer listeleri filtrelemek için kullanılan select referansları
         const antrenorSel = document.getElementById("antrenorSecim");
         const hizmetSel = document.getElementById("hizmetSecim");
         const salonSel = document.getElementById("salonSecim");
 
+        // Select içeriğini dinamik olarak doldurur (placeholder + gelen item listesi)
         function fillSelect(selectEl, items, placeholder) {
             const current = selectEl.value;
 
@@ -99,12 +111,13 @@
                 selectEl.appendChild(opt);
             });
 
-            // önceki seçim hâlâ varsa koru
+            // önceki seçim hâlâ listede varsa koru (sayfa refresh / edit senaryosu)
             if ([...selectEl.options].some(o => o.value === current)) {
                 selectEl.value = current;
             }
         }
 
+        // Antrenör seçilince: o antrenöre uygun salon + hizmetleri API'den çekip dropdown'ları günceller
         async function onAntrenorChanged() {
             const id = antrenorSel.value;
             if (!id) return;
@@ -112,11 +125,11 @@
             const res = await fetch(`/Randevu/GetOptionsByAntrenor?antrenorId=${id}`);
             const data = await res.json();
 
-            // Antrenör seçildi -> salon + hizmet filtrelenir
             fillSelect(salonSel, data.salons, "-- Salon Seçiniz --");
             fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
         }
 
+        // Salon seçilince: o salona uygun antrenör + hizmetleri API'den çekip dropdown'ları günceller
         async function onSalonChanged() {
             const id = salonSel.value;
             if (!id) return;
@@ -124,7 +137,6 @@
             const res = await fetch(`/Randevu/GetOptionsBySalon?salonId=${id}`);
             const data = await res.json();
 
-            // Salon seçildi -> antrenör + hizmet filtrelenir
             fillSelect(antrenorSel, data.antrenorler, "-- Antrenör Seçiniz --");
             fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
         }
@@ -132,16 +144,13 @@
         antrenorSel?.addEventListener("change", onAntrenorChanged);
         salonSel?.addEventListener("change", onSalonChanged);
 
-        // sayfa açılınca (edit gibi durumlarda) seçili değer varsa uygula
+        // Sayfa ilk açıldığında seçili değer varsa dropdown'ları ona göre senkronlar (edit / geri dönüş senaryosu)
         window.addEventListener("load", () => {
             if (antrenorSel?.value) onAntrenorChanged();
             else if (salonSel?.value) onSalonChanged();
         });
 
-        // -----------------------------
-        // 2) Hizmet süresine göre bitiş saati otomatik hesaplama
-        // (Senin mevcut kodun korunuyor)
-        // -----------------------------
+        // Hizmet seçilince: hizmet süresini API'den çekip globalde tutar (bitiş saati hesabında kullanılacak)
         document.getElementById("hizmetSecim").addEventListener("change", function () {
             var secilenId = this.value;
             if (!secilenId) return;
@@ -154,6 +163,7 @@
                 .catch(() => { window.hizmetSuresi = null; });
         });
 
+        // Başlangıç saati girilince: hizmet süresine göre bitiş saatini otomatik hesaplar ve input'a yazar
         document.getElementById("baslangicSaat").addEventListener("input", function () {
             if (!window.hizmetSuresi) return;
 

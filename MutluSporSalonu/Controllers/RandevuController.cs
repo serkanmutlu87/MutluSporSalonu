@@ -3,6 +3,13 @@
 * @description Mutlu Spor Salonu uygulamasında randevu kayıtları için CRUD işlemlerini,
 *              rol bazlı yetkilendirmeyi (Admin/Uye), dependent dropdown endpointlerini
 *              ve randevu onaylama/onay kaldırma iş kurallarını yöneten controller sınıfı.
+*
+*              Notlar (kısa):
+*              - Üye kullanıcı için UyeID server-side set edilir (claim’den alınır); formdan gelen UyeID dikkate alınmaz.
+*              - Üye kullanıcı randevuyu "onaylı" oluşturamaz / güncelleyemez (onay sadece Admin’de).
+*              - Dependent dropdown: Antrenör seçilince salon + o salondaki hizmetler; Salon seçilince antrenörler + hizmetler döner.
+*              - Çakışma kontrolü: Aynı antrenörün aynı günde saat aralığı çakışan randevusu varsa engellenir.
+*
 * @course      WEB PROGRAMLAMA (ASP.NET Core MVC) – 2025-2026 Güz
 * @assignment  Dönem Projesi – MutluSporSalonu
 * @date        19.12.2025
@@ -36,12 +43,14 @@ namespace MutluSporSalonu.Controllers
         // ------------------------------------------------------------
         private bool IsAdmin() => User.IsInRole("Admin");
 
+        // Login sırasında set edilen ClaimTypes.NameIdentifier üzerinden aktif üye ID çekilir
         private int? GetCurrentUyeId()
         {
             var s = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.TryParse(s, out var id) ? id : (int?)null;
         }
 
+        // Details/Delete gibi ekranlarda ilişkili tablolarla birlikte randevuyu getirir
         private async Task<Randevu?> GetRandevuWithIncludesAsync(int id)
         {
             return await _context.Randevular
@@ -52,6 +61,7 @@ namespace MutluSporSalonu.Controllers
                 .FirstOrDefaultAsync(r => r.RandevuID == id);
         }
 
+        // Üye rolünde: sadece kendi randevularını görsün/düzenlesin
         private bool IsOwner(Randevu randevu)
         {
             var uyeId = GetCurrentUyeId();
@@ -161,7 +171,7 @@ namespace MutluSporSalonu.Controllers
             return View(liste);
         }
 
-        // (Opsiyonel) Admin için sadece bekleyen randevular
+        // Admin için sadece bekleyen randevular
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Bekleyenler()
         {
@@ -228,6 +238,7 @@ namespace MutluSporSalonu.Controllers
 
             HazirlaDropDownListelerForCurrentUser(randevu);
 
+            // Saat kontrolü: başlangıç < bitiş olmalı
             if (randevu.RandevuBaslangicSaati >= randevu.RandevuBitisSaati)
                 ModelState.AddModelError(string.Empty, "Başlangıç saati, bitiş saatinden önce olmalıdır.");
 
@@ -237,12 +248,14 @@ namespace MutluSporSalonu.Controllers
             if (hizmet == null) ModelState.AddModelError("HizmetID", "Seçilen hizmet bulunamadı.");
             if (antrenor == null) ModelState.AddModelError("AntrenorID", "Seçilen antrenör bulunamadı.");
 
+            // Dropdown ile filtrelense bile server tarafında salon-antrenör/hizmet uyumu kontrol edilir
             if (antrenor != null && randevu.SalonID > 0 && antrenor.SalonID != randevu.SalonID)
                 ModelState.AddModelError(string.Empty, "Seçilen antrenör ile seçilen salon uyuşmuyor.");
 
             if (hizmet != null && randevu.SalonID > 0 && hizmet.SalonID != randevu.SalonID)
                 ModelState.AddModelError(string.Empty, "Seçilen hizmet bu salonda verilmiyor.");
 
+            // Antrenör müsaitlik aralığı kontrolü
             if (antrenor != null)
             {
                 if (randevu.RandevuBaslangicSaati < antrenor.AntrenorMusaitlikBaslangic ||
@@ -253,6 +266,7 @@ namespace MutluSporSalonu.Controllers
                 }
             }
 
+            // Çakışma kontrolü: aynı antrenör + aynı gün + saat aralığı overlap
             if (antrenor != null)
             {
                 var ayniGundeRandevular = await _context.Randevular
@@ -342,6 +356,7 @@ namespace MutluSporSalonu.Controllers
 
             HazirlaDropDownListelerForCurrentUser(randevu);
 
+            // Saat kontrolü: başlangıç < bitiş olmalı
             if (randevu.RandevuBaslangicSaati >= randevu.RandevuBitisSaati)
                 ModelState.AddModelError(string.Empty, "Başlangıç saati, bitiş saatinden önce olmalıdır.");
 
@@ -356,6 +371,7 @@ namespace MutluSporSalonu.Controllers
 
             if (antrenor != null)
             {
+                // Antrenör müsaitlik aralığı kontrolü
                 if (randevu.RandevuBaslangicSaati < antrenor.AntrenorMusaitlikBaslangic ||
                     randevu.RandevuBitisSaati > antrenor.AntrenorMusaitlikBitis)
                 {
@@ -363,6 +379,7 @@ namespace MutluSporSalonu.Controllers
                         "Seçilen saat aralığı, antrenörün müsaitlik saatleri dışında kalıyor.");
                 }
 
+                // Çakışma kontrolü (edit): kendi kaydını hariç tut
                 var ayniGundeRandevular = await _context.Randevular
                     .Where(x =>
                         x.AntrenorID == randevu.AntrenorID &&
@@ -482,6 +499,7 @@ namespace MutluSporSalonu.Controllers
             var uyeId = GetCurrentUyeId();
             if (uyeId == null) return;
 
+            // Üye için: sadece kendisini seçebilir (formda başka üye görünmez)
             ViewBag.Uyeler = new SelectList(
                 _context.Uyeler.Where(u => u.UyeID == uyeId.Value).ToList(),
                 "UyeID", "UyeAdSoyad", uyeId.Value);

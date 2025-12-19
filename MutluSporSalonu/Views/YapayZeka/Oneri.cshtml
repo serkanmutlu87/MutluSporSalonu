@@ -1,4 +1,15 @@
-﻿@{
+﻿@*
+@file        Oneri.cshtml
+@description Yapay zekâ destekli egzersiz ve diyet öneri ekranı.
+             Kullanıcıdan hedef ve ek not alınır, sistem randevu geçmişi
+             ve üye bilgileriyle birlikte kişiselleştirilmiş öneri üretir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@{
     ViewData["Title"] = "Yapay Zekâ Egzersiz & Diyet Önerisi";
 
     string? oneri = ViewBag.OneriMetni as string;

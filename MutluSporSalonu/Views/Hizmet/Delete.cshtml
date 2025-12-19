@@ -1,11 +1,27 @@
-﻿@model MutluSporSalonu.Models.Hizmet
+﻿@*
+@file        Delete.cshtml
+@description Sistemde tanımlı olan bir hizmet kaydının silinmesi için
+             kullanıcıdan onay alınan ekrandır.
+             Bu sayfaya sadece Admin rolüne sahip kullanıcılar erişebilir.
+             Onay verilmesi durumunda silme işlemi HizmetController
+             içerisindeki Delete action'ı üzerinden gerçekleştirilir.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Hizmet
 
 @{
+    // Kullanıcının Admin olup olmadığı kontrol edilir
     bool adminMi = User.IsInRole("Admin");
 }
 
 @if (!adminMi)
 {
+    <!-- Admin olmayan kullanıcılar için erişim engellenir -->
     <div class="container mt-4">
         <div class="alert alert-danger">
             Bu sayfaya erişim yetkiniz yok.
@@ -15,7 +31,6 @@
     return;
 }
 
-
 @{
     ViewData["Title"] = "Hizmeti Sil";
 }
@@ -23,10 +38,12 @@
 <div class="container mt-4">
     <h2 class="mb-4 text-danger">Hizmeti Sil</h2>
 
+    <!-- Kullanıcıya silme işleminin geri alınamaz olduğu bilgisi verilir -->
     <div class="alert alert-warning">
         <strong>Dikkat!</strong> Aşağıdaki hizmeti silmek üzeresiniz. Bu işlem geri alınamaz!
     </div>
 
+    <!-- Silinecek hizmetin özet bilgileri gösterilir -->
     <div class="card mb-3">
         <div class="card-body">
             <h4 class="card-title">@Model.HizmetAdi</h4>
@@ -51,6 +68,7 @@
         </div>
     </div>
 
+    <!-- Silme işlemi POST ile gönderilir -->
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="HizmetID" />
 

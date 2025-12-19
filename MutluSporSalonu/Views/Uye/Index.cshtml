@@ -1,4 +1,15 @@
-﻿@model IEnumerable<MutluSporSalonu.Models.Uye>
+﻿@*
+@file        Index.cshtml
+@description Üyeler listeleme ekranıdır. Sadece Admin rolündeki kullanıcılar görüntüleyebilir.
+             Yetkisiz erişimde uyarı mesajı gösterilir. Admin; üyeleri görüntüleyebilir,
+             düzenleyebilir ve silebilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model IEnumerable<MutluSporSalonu.Models.Uye>
 
 @{
     ViewData["Title"] = "Üyeler";

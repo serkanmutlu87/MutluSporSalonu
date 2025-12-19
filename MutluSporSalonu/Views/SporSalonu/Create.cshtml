@@ -1,4 +1,15 @@
-﻿@model MutluSporSalonu.Models.SporSalonu
+﻿@*
+@file        Create.cshtml
+@description Yeni spor salonu kaydı oluşturma ekranıdır.
+             Bu sayfaya sadece Admin rolüne sahip kullanıcılar erişebilir.
+             Form verileri SporSalonuController içerisindeki Create action'ına gönderilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.SporSalonu
 
 @{
     ViewData["Title"] = "Yeni Spor Salonu Ekle";
@@ -6,6 +17,7 @@
 
 <div class="container mt-4">
 
+    @* Admin değilse formu göstermeyip uyarı veriyoruz *@
     @if (!User.IsInRole("Admin"))
     {
         <div class="alert alert-warning">
@@ -20,6 +32,7 @@
 
         <form asp-action="Create" method="post" class="row g-3">
 
+            @* Model doğrulamaları için client-side validation scriptleri çalışır *@
             <div class="col-md-6">
                 <label asp-for="SalonAdi" class="form-label"></label>
                 <input asp-for="SalonAdi" class="form-control" />

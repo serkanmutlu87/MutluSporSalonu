@@ -1,4 +1,16 @@
-﻿@{
+﻿@*
+@file        AdminHome.cshtml
+@description Admin ana sayfa (dashboard) ekranıdır.
+             Admin; spor salonu, hizmet, antrenör ve randevu yönetim ekranlarına buradan hızlı erişir.
+             Bu sayfa sadece Admin rolündeki kullanıcılar için HomeController/AdminHome action’ı üzerinden açılır.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@{
     ViewData["Title"] = "Admin Ana Sayfa";
 }
 
@@ -16,18 +28,24 @@
             </p>
 
             <div class="d-flex flex-wrap gap-2 mt-3">
+                @* Randevu listesini açar (Admin tüm randevuları görür) *@
                 <a asp-controller="Randevu" asp-action="Index" class="btn btn-success">
                     Randevu Listesi
                 </a>
+
+                @* AI modülü test/deneme ekranı *@
                 <a asp-controller="YapayZeka" asp-action="Oneri" class="btn btn-outline-primary">
                     AI Öneri Ekranı
                 </a>
+
+                @* Üye yönetim ekranına gider (liste sadece Admin’de var) *@
                 <a asp-controller="Uye" asp-action="Index" class="btn btn-outline-secondary">
                     Üye Listesi
                 </a>
             </div>
 
             <p class="small text-muted mt-3 mb-0">
+                @* Kurulum sırası: salon → hizmet → antrenör → randevu *@
                 İpucu: Yeni bir yapı kuruyorsanız önce <strong>Spor Salonu</strong> → <strong>Hizmet</strong> → <strong>Antrenör</strong> tanımlayın,
                 sonra randevu akışını başlatın.
             </p>
@@ -58,6 +76,7 @@
                     <p class="card-text small flex-grow-1">
                         Salon kayıtlarını oluşturun, düzenleyin ve görünürlük/iletişim bilgilerini güncel tutun.
                     </p>
+                    @* Spor salonu listeleme/yönetim *@
                     <a asp-controller="SporSalonu" asp-action="Index" class="btn btn-outline-primary mt-2">
                         Salon Yönetimi
                     </a>
@@ -72,6 +91,7 @@
                     <p class="card-text small flex-grow-1">
                         Hizmet tanımlarını yönetin: süre (dk), ücret ve açıklama bilgilerini standartlaştırın.
                     </p>
+                    @* Hizmet listeleme/yönetim *@
                     <a asp-controller="Hizmet" asp-action="Index" class="btn btn-outline-primary mt-2">
                         Hizmet Yönetimi
                     </a>
@@ -86,6 +106,7 @@
                     <p class="card-text small flex-grow-1">
                         Antrenör profilini ve müsaitlik saatlerini yönetin. Randevu planlaması bu bilgilere göre yapılır.
                     </p>
+                    @* Antrenör listeleme/yönetim *@
                     <a asp-controller="Antrenor" asp-action="Index" class="btn btn-outline-primary mt-2">
                         Antrenör Yönetimi
                     </a>
@@ -100,6 +121,7 @@
                     <p class="card-text small flex-grow-1">
                         Randevuları oluşturun, düzenleyin ve onay durumlarını yönetin. Çakışma ve süre kontrolü yapın.
                     </p>
+                    @* Yeni randevu oluşturma ekranı *@
                     <a asp-controller="Randevu" asp-action="Create" class="btn btn-outline-primary mt-2">
                         Randevu Oluştur
                     </a>
@@ -108,7 +130,7 @@
         </div>
     </div>
 
-    <!-- YAPAY ZEKA VE API BÖLÜMÜ -->
+    <!-- YAPAY ZEKA VE RAPORLAMA BÖLÜMÜ -->
     <div class="row g-4 mb-5">
         <div class="col-md-6">
             <div class="card shadow-sm h-100">
@@ -117,6 +139,7 @@
                     <p class="card-text small">
                         Üyelerin hedef ve ölçüm bilgilerine göre egzersiz/beslenme planı üretimini buradan test edin ve çıktıları kontrol edin.
                     </p>
+                    @* Yapay zeka öneri formuna gider *@
                     <a asp-controller="YapayZeka" asp-action="Oneri" class="btn btn-success btn-sm">
                         Öneri Ekranına Git
                     </a>
@@ -143,6 +166,7 @@
 
     <!-- ALT BİLGİ -->
     <div class="alert alert-secondary small" role="alert">
+        @* Yönetim işlemlerinin tüm sistemi etkilediğine dair uyarı *@
         <strong>Not:</strong> Yönetim paneli üzerinden yapılan değişiklikler sistem geneline etki eder.
         Kayıt silme/güncelleme işlemlerinde randevu ilişkilerini kontrol etmeyi unutmayın.
     </div>

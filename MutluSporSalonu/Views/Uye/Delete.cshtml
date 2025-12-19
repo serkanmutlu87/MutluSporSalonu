@@ -1,4 +1,16 @@
-﻿@model MutluSporSalonu.Models.Uye
+﻿@*
+@file        Delete.cshtml
+@description Üye silme ekranıdır. Admin kullanıcılar tüm üyeleri silebilir;
+             normal üyeler yalnızca kendi hesaplarını silebilir. Razor
+             tarafında rol ve sahiplik (ownership) kontrolü yapılarak
+             yetkisiz silme işlemleri engellenmiştir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Uye
 @using System.Security.Claims
 
 @{
@@ -40,7 +52,7 @@
                     <strong>E-posta:</strong> @Model.UyeEposta <br />
                     <strong>Telefon:</strong> @(string.IsNullOrWhiteSpace(Model.UyeTelefon) ? "-" : Model.UyeTelefon) <br />
 
-                    @* Rol bilgisini sadece Admin görsün (istersen tamamen kaldırabiliriz) *@
+                    @* Rol bilgisini sadece Admin görsün *@
                     @if (isAdmin)
                     {
                         <strong>Rol:</strong> @Model.Rol <br />

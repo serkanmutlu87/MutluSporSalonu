@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Gemini servisin varsa:
 builder.Services.AddScoped<IYapayZekaServisi, GeminiYapayZekaServisi>();
 
 builder.Services.AddDbContext<DBContext>(options =>
@@ -42,6 +41,7 @@ if (!app.Environment.IsDevelopment())
 
 }
 
+app.MapControllers();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

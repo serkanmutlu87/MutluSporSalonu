@@ -1,7 +1,22 @@
-﻿@model MutluSporSalonu.Models.Antrenor
+﻿@*
+@file        Edit.cshtml
+@description Antrenör bilgilerini güncellemek için kullanılan düzenleme ekranıdır.
+             Sayfaya erişim rol bazlı olarak sınırlandırılır.
+             Admin olmayan kullanıcıların erişimi View seviyesinde engellenir.
+             Form doğrulamaları DataAnnotation kurallarına göre çalışır.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Antrenor
 
 @{
     ViewData["Title"] = "Antrenör Düzenle";
+
+    // Kullanıcının Admin rolünde olup olmadığı kontrol edilir
     bool adminMi = User?.IsInRole("Admin") ?? false;
 }
 
@@ -21,6 +36,7 @@
 
     <form asp-action="Edit" method="post" class="row g-3">
 
+        @* Düzenleme sırasında hangi antrenörün güncelleneceğini belirtir *@
         <input type="hidden" asp-for="AntrenorID" />
 
         <div class="col-md-6">

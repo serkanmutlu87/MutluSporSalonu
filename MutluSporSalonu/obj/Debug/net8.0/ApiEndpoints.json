@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "ContainingType": "MutluSporSalonu.Controllers.Api.AntrenorApiController",
+    "Method": "TumAntrenorleriGetir",
+    "RelativePath": "api/antrenor",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MutluSporSalonu.Controllers.Api.AntrenorApiController",
+    "Method": "UygunAntrenorleriGetir",
+    "RelativePath": "api/antrenor/uygun",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tarih",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "baslangic",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "bitis",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MutluSporSalonu.Controllers.Api.RandevuApiController",
+    "Method": "TumRandevular",
+    "RelativePath": "api/RandevuApi",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MutluSporSalonu.Controllers.Api.RandevuApiController",
+    "Method": "BenimRandevularim",
+    "RelativePath": "api/RandevuApi/benim",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MutluSporSalonu.Controllers.Api.RandevuApiController",
+    "Method": "TariheGore",
+    "RelativePath": "api/RandevuApi/tarih",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tarih",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

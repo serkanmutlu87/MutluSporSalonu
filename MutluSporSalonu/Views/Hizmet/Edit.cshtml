@@ -1,11 +1,25 @@
-﻿@model MutluSporSalonu.Models.Hizmet
+﻿@*
+@file        Edit.cshtml
+@description Sistemde tanımlı bir hizmet kaydının güncellenmesi için kullanılan ekrandır.
+             Bu sayfaya sadece Admin rolüne sahip kullanıcılar erişebilir.
+             Form verileri HizmetController içerisindeki Edit action'ına gönderilir.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Hizmet
 
 @{
+    // Kullanıcının Admin rolünde olup olmadığı kontrol edilir
     bool adminMi = User.IsInRole("Admin");
 }
 
 @if (!adminMi)
 {
+    <!-- Admin olmayan kullanıcılar için erişim engeli -->
     <div class="container mt-4">
         <div class="alert alert-danger">
             Bu sayfaya erişim yetkiniz yok.
@@ -22,8 +36,10 @@
 <div class="container mt-4">
     <h2 class="mb-4">Hizmet Düzenle</h2>
 
+    <!-- Hizmet güncelleme formu -->
     <form asp-action="Edit" method="post" class="row g-3">
 
+        <!-- Güncellenecek hizmetin ID bilgisi -->
         <input type="hidden" asp-for="HizmetID" />
 
         <div class="col-md-6">
@@ -68,6 +84,7 @@
 
 @section Scripts {
     @{
+        // Client-side validation scriptleri
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

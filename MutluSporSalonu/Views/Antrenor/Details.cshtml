@@ -1,7 +1,28 @@
-﻿@model MutluSporSalonu.Models.Antrenor
+﻿@*
+@file        Details.cshtml
+@description Mutlu Spor Salonu uygulamasında bir antrenöre ait detay bilgilerini
+             görüntüleyen Razor View.
+
+             Sağlanan işlevler:
+             - Antrenörün temel bilgilerini (ad, uzmanlık, iletişim, müsaitlik) ekranda gösterir.
+             - Antrenörün bağlı olduğu spor salonu bilgisini koşullu olarak sunar.
+             - Antrenörün verebildiği hizmetleri liste halinde görüntüler.
+             - Kullanıcının Admin rolünde olup olmadığını kontrol eder.
+             - Admin kullanıcılar için düzenleme ve silme işlemlerine erişim sağlar.
+             - Admin olmayan kullanıcılar için yalnızca görüntüleme yetkisi sunar.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Antrenor
 
 @{
     ViewData["Title"] = "Antrenör Detay";
+
+    // Kullanıcının Admin rolü kontrol edilir
     bool adminMi = User?.IsInRole("Admin") ?? false;
 }
 
@@ -12,6 +33,7 @@
         <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
     </div>
 
+    @* Antrenör temel bilgileri *@
     <div class="card shadow-sm mb-4">
         <div class="card-body">
 
@@ -46,6 +68,7 @@
                 @Model.AntrenorMusaitlikBitis.ToString(@"hh\:mm")
             </p>
 
+            @* Sadece Admin kullanıcılar için işlem butonları *@
             @if (adminMi)
             {
                 <div class="mt-3">
@@ -57,6 +80,7 @@
         </div>
     </div>
 
+    @* Antrenörün verebildiği hizmetler *@
     @if (Model.Hizmetler != null && Model.Hizmetler.Any())
     {
         <div class="card shadow-sm">
@@ -71,7 +95,8 @@
                             <span>
                                 <strong>@hizmet.HizmetAdi</strong><br />
                                 <small class="text-muted">
-                                    Süre: @hizmet.HizmetSureDakika dakika | Ücret: @hizmet.HizmetUcret ₺
+                                    Süre: @hizmet.HizmetSureDakika dakika |
+                                    Ücret: @hizmet.HizmetUcret ₺
                                 </small>
                             </span>
                         </li>

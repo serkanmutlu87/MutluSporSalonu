@@ -1,4 +1,17 @@
-﻿@model IEnumerable<MutluSporSalonu.Models.Antrenor>
+﻿@*
+@file        Index.cshtml
+@description Sistemde kayıtlı antrenörlerin liste halinde görüntülendiği sayfadır.
+             Kullanıcının rolüne göre ekran davranışı farklılaşır.
+             Admin kullanıcılar için ekleme, düzenleme ve silme işlemleri görünür olur.
+             Normal üyeler yalnızca listeleme ve detay görüntüleme yapabilir.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model IEnumerable<MutluSporSalonu.Models.Antrenor>
 
 @{
     ViewData["Title"] = "Antrenörler";

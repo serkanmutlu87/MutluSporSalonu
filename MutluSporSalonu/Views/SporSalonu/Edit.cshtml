@@ -1,4 +1,15 @@
-﻿@model MutluSporSalonu.Models.SporSalonu
+﻿@*
+@file        Edit.cshtml
+@description Spor salonu düzenleme ekranıdır.
+             Bu sayfaya sadece Admin rolüne sahip kullanıcılar erişebilir.
+             Form verileri SporSalonuController içerisindeki Edit action'ına gönderilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.SporSalonu
 
 @{
     ViewData["Title"] = "Spor Salonu Düzenle";
@@ -6,6 +17,7 @@
 
 <div class="container mt-4">
 
+    @* Admin değilse form gösterilmez *@
     @if (!User.IsInRole("Admin"))
     {
         <div class="alert alert-warning">
@@ -20,6 +32,7 @@
 
         <form asp-action="Edit" method="post" class="row g-3">
 
+            @* Güncellenecek kaydı belirlemek için ID gizli gönderilir *@
             <input type="hidden" asp-for="SalonID" />
 
             <div class="col-md-6">

@@ -1,12 +1,34 @@
-﻿@model MutluSporSalonu.Models.Antrenor
+﻿@*
+@file        Create.cshtml
+@description Mutlu Spor Salonu uygulamasında yeni antrenör ekleme ekranını sunan Razor View.
+             Bu ekran yalnızca Admin rolüne sahip kullanıcılar tarafından kullanılabilir.
+
+             Sağlanan özellikler:
+             - Kullanıcının Admin rolünde olup olmadığını kontrol eder.
+             - Yetkisiz erişim durumunda bilgilendirici hata mesajı gösterir.
+             - Antrenör bilgileri için doğrulama kurallarını arayüz seviyesinde uygular.
+             - Spor salonu seçimi için sunucu tarafından gönderilen dropdown listesini kullanır.
+             - Müsaitlik saatlerinin saat:dakika formatında girilmesini sağlar.
+             - ASP.NET Core Tag Helper yapısı ile model bağlama ve doğrulama entegrasyonu sunar.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Antrenor
 
 @{
     ViewData["Title"] = "Yeni Antrenör Ekle";
+
+    // Giriş yapan kullanıcının Admin rolünde olup olmadığı belirlenir
     bool adminMi = User?.IsInRole("Admin") ?? false;
 }
 
 <div class="container mt-4">
 
+    @* Admin olmayan kullanıcılar için erişim kısıtı *@
     @if (!adminMi)
     {
         <div class="alert alert-danger">
@@ -20,6 +42,7 @@
     {
         <h2 class="mb-4">Yeni Antrenör Ekle</h2>
 
+        @* Antrenör ekleme formu *@
         <form asp-action="Create" method="post" class="row g-3">
 
             <div class="col-md-6">
@@ -47,6 +70,7 @@
                 <span asp-validation-for="AntrenorEposta" class="text-danger"></span>
             </div>
 
+            @* Spor salonu seçimi (sunucudan gelen liste) *@
             <div class="col-md-4">
                 <label asp-for="SalonID" class="form-label">Spor Salonu</label>
                 <select asp-for="SalonID" asp-items="ViewBag.SalonID" class="form-select">
@@ -55,6 +79,7 @@
                 <span asp-validation-for="SalonID" class="text-danger"></span>
             </div>
 
+            @* Antrenör müsaitlik saatleri *@
             <div class="col-md-3">
                 <label asp-for="AntrenorMusaitlikBaslangic" class="form-label"></label>
                 <input asp-for="AntrenorMusaitlikBaslangic" class="form-control" type="time" />
@@ -67,6 +92,7 @@
                 <span asp-validation-for="AntrenorMusaitlikBitis" class="text-danger"></span>
             </div>
 
+            @* Form aksiyonları *@
             <div class="col-12 d-flex justify-content-between mt-3">
                 <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
                 <button type="submit" class="btn btn-success">Kaydet</button>
@@ -77,6 +103,7 @@
 
 @section Scripts {
     @{
+        // Client-side validation scriptleri
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

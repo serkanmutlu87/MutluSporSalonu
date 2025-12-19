@@ -1,4 +1,22 @@
-﻿using System;
+﻿/**
+* @file        AntrenorController.cs
+* @description Mutlu Spor Salonu uygulamasında antrenör yönetimini sağlayan MVC controller.
+*              View tabanlı çalışır.
+*
+*              Sağlanan işlevler:
+*              - Antrenör listesini salon bilgileriyle birlikte görüntüler.
+*              - Antrenör detay bilgilerini ve verdiği hizmetleri gösterir.
+*              - Admin rolü için antrenör ekleme, güncelleme ve silme işlemlerini sağlar.
+*              - Üye ve Admin rolleri için sadece listeleme ve detay görüntüleme izni verir.
+*              - Rol bazlı yetkilendirme ile güvenli erişim kontrolü uygular.
+*
+* @course      BSM 311 Web Programlama
+* @assignment  Dönem Projesi – MutluSporSalonu
+* @date        20.12.2025
+* @author      D255012008 - Serkan Mutlu
+*/
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +27,7 @@ using MutluSporSalonu.Models;
 
 namespace MutluSporSalonu.Controllers
 {
-    [Authorize] // giriş zorunlu olsun (istersen kaldır)
+    [Authorize] // Kimlik doğrulaması olmayan kullanıcıların erişimini engeller
     public class AntrenorController : Controller
     {
         private readonly DBContext _context;

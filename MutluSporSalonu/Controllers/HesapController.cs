@@ -1,4 +1,22 @@
-﻿using System;
+﻿/**
+* @file        HesapController.cs
+* @description Mutlu Spor Salonu uygulamasında kullanıcı kimlik doğrulama işlemlerini yöneten MVC controller.
+*              Cookie tabanlı authentication kullanır.
+*
+*              Sağlanan işlevler:
+*              - Kullanıcı giriş (login) işlemlerini gerçekleştirir.
+*              - Kullanıcı kayıt (register) işlemlerini gerçekleştirir.
+*              - Rol bilgisine göre (Admin / Üye) yönlendirme yapar.
+*              - CookieAuthentication ile oturum açma ve kapatma işlemlerini yönetir.
+*              - Yetkisiz erişimler için Authorize / AllowAnonymous kurallarını uygular.
+*
+* @course      BSM 311 Web Programlama
+* @assignment  Dönem Projesi – MutluSporSalonu
+* @date        20.12.2025
+* @author      D255012008 - Serkan Mutlu
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,11 +39,11 @@ namespace MutluSporSalonu.Controllers
         }
 
         // --------------------------------------------------------------------
-        // GİRİŞ
+        // GİRİŞ (LOGIN)
         // --------------------------------------------------------------------
 
         [HttpGet]
-        [AllowAnonymous] // Giriş ekranına herkes erişebilsin
+        [AllowAnonymous] // Giriş ekranına yetkilendirme olmadan erişim sağlar
         public IActionResult Giris(string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -39,7 +57,7 @@ namespace MutluSporSalonu.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            // Login ekranında bu alanlar yok, o yüzden validasyondan çıkar
+            // Login ekranında bulunmayan alanları model doğrulamasından çıkarır
             ModelState.Remove(nameof(Uye.UyeAdSoyad));
             ModelState.Remove(nameof(Uye.UyeTelefon));
             ModelState.Remove(nameof(Uye.KayitTarihi));
@@ -51,6 +69,7 @@ namespace MutluSporSalonu.Controllers
             var email = (model.UyeEposta ?? "").Trim();
             var sifre = model.UyeSifre ?? "";
 
+            // E-posta ve şifre bilgisine göre kullanıcıyı veritabanında arar
             var uye = await _veriTabani.Uyeler.FirstOrDefaultAsync(u =>
                 u.UyeEposta.Trim().ToLower() == email.ToLower() &&
                 u.UyeSifre == sifre);
@@ -61,10 +80,11 @@ namespace MutluSporSalonu.Controllers
                 return View(model);
             }
 
+            // Rol bilgisini normalize eder (Admin / Uye)
             var rolDb = (uye.Rol ?? "Uye").Trim();
             var rol = rolDb.Equals("Admin", StringComparison.OrdinalIgnoreCase) ? "Admin" : "Uye";
-            new Claim(ClaimTypes.Role, rol);
 
+            // Kullanıcıya ait claim listesini oluşturur
             var haklar = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, uye.UyeID.ToString()),
@@ -73,28 +93,31 @@ namespace MutluSporSalonu.Controllers
                 new Claim(ClaimTypes.Role, rol)
             };
 
+            // Cookie tabanlı kimlik nesnesi oluşturur
             var kimlik = new ClaimsIdentity(
                 haklar,
                 CookieAuthenticationDefaults.AuthenticationScheme);
 
             var kullanici = new ClaimsPrincipal(kimlik);
 
+            // Kullanıcıyı sisteme giriş yapmış olarak işaretler
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 kullanici);
 
+            // Rol bilgisine göre ana sayfa yönlendirmesi yapar
             if (string.Equals(rol, "Admin", StringComparison.OrdinalIgnoreCase))
                 return RedirectToAction("AdminHome", "Home");
 
-            return RedirectToAction("UyeHome", "Home"); ;
+            return RedirectToAction("UyeHome", "Home");
         }
 
         // --------------------------------------------------------------------
-        // KAYIT
+        // KAYIT (REGISTER)
         // --------------------------------------------------------------------
 
         [HttpGet]
-        [AllowAnonymous] // Kayıt ekranına da giriş yapmadan erişilebilsin
+        [AllowAnonymous] // Kayıt ekranına giriş yapmadan erişim sağlar
         public IActionResult Kayit()
         {
             return View(new Uye());
@@ -108,7 +131,7 @@ namespace MutluSporSalonu.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Bu e-posta ile daha önce kayıt yapılmış mı?
+            // Aynı e-posta adresiyle kayıtlı kullanıcı olup olmadığını kontrol eder
             bool epostaVarMi = await _veriTabani.Uyeler
                 .AnyAsync(u => u.UyeEposta == model.UyeEposta);
 
@@ -118,7 +141,7 @@ namespace MutluSporSalonu.Controllers
                 return View(model);
             }
 
-            // Yeni üye nesnesi oluştur
+            // Yeni kullanıcı nesnesi oluşturur
             var yeniUye = new Uye
             {
                 UyeAdSoyad = model.UyeAdSoyad,
@@ -136,11 +159,11 @@ namespace MutluSporSalonu.Controllers
         }
 
         // --------------------------------------------------------------------
-        // ÇIKIŞ
+        // ÇIKIŞ (LOGOUT)
         // --------------------------------------------------------------------
 
         [HttpPost]
-        [Authorize] // Çıkış işlemini sadece giriş yapmış kullanıcı çağırabilsin
+        [Authorize] // Sadece giriş yapmış kullanıcıların çıkış yapmasını sağlar
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cikis()
         {

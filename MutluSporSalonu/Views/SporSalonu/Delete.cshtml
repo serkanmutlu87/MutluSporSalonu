@@ -1,4 +1,16 @@
-﻿@model MutluSporSalonu.Models.SporSalonu
+﻿@*
+@file        Delete.cshtml
+@description Spor salonu silme onay ekranıdır.
+             Bu sayfaya sadece Admin rolüne sahip kullanıcılar erişebilir.
+             Seçilen salon bilgileri gösterilir ve silme işlemi SporSalonuController içindeki
+             Delete (POST) action'ına gönderilerek gerçekleştirilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.SporSalonu
 
 @{
     ViewData["Title"] = "Spor Salonu Sil";
@@ -6,6 +18,7 @@
 
 <div class="container mt-4">
 
+    @* Admin değilse silme formunu göstermeyip uyarı veriyoruz *@
     @if (!User.IsInRole("Admin"))
     {
         <div class="alert alert-danger">
@@ -18,10 +31,12 @@
     {
         <h2 class="mb-4 text-danger">Spor Salonunu Sil</h2>
 
+        @* Kullanıcıdan silme işlemi için onay alınan uyarı kutusu *@
         <div class="alert alert-warning">
             <strong>Dikkat!</strong> Aşağıdaki spor salonunu silmek üzeresiniz. Bu işlem geri alınamaz.
         </div>
 
+        @* Silinecek salonun özet bilgileri *@
         <div class="card mb-3">
             <div class="card-body">
                 <h4 class="card-title">@Model.SalonAdi</h4>
@@ -30,7 +45,9 @@
                     <strong>Çalışma Saatleri:</strong>
                     @Model.SalonAcilisSaati.ToString(@"hh\:mm") -
                     @Model.SalonKapanisSaati.ToString(@"hh\:mm") <br />
+
                     <strong>Açıklama:</strong>
+                    @* Açıklama boşsa kullanıcıya bilgi veriyoruz *@
                     @if (string.IsNullOrWhiteSpace(Model.SalonAciklama))
                     {
                         <span class="text-muted">Açıklama bulunmuyor.</span>
@@ -43,6 +60,7 @@
             </div>
         </div>
 
+        @* Silme işlemi POST ile yapılır; SalonID hidden field ile gönderilir *@
         <form asp-action="Delete" method="post">
             <input type="hidden" asp-for="SalonID" />
 

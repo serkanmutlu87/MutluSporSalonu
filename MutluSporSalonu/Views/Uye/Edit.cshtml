@@ -1,4 +1,16 @@
-﻿@model MutluSporSalonu.Models.Uye
+﻿@*
+@file        Edit.cshtml
+@description Üye düzenleme ekranıdır. Admin kullanıcılar tüm üyeleri düzenleyebilir;
+             normal üyeler yalnızca kendi hesaplarını düzenleyebilir. Razor tarafında
+             rol ve sahiplik (ownership) kontrolü yapılarak yetkisiz düzenleme işlemleri
+             engellenmiştir. Rol alanı sadece Admin için görünür ve değiştirilebilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Uye
 @using System.Security.Claims
 
 @{

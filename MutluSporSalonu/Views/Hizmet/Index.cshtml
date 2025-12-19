@@ -1,7 +1,21 @@
-﻿@model IEnumerable<MutluSporSalonu.Models.Hizmet>
+﻿@*
+@file        Index.cshtml
+@description Sistemde tanımlı tüm hizmetlerin listelendiği ekrandır.
+             Admin kullanıcılar "Hizmet Ekle / Düzenle / Sil" işlemlerini görür.
+             Normal üyeler sadece "Detay" görüntüleyebilir.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model IEnumerable<MutluSporSalonu.Models.Hizmet>
 
 @{
     ViewData["Title"] = "Hizmetler";
+
+    // Kullanıcının Admin rolünde olup olmadığı kontrol edilir (butonlar buna göre gösterilir)
     bool adminMi = User.IsInRole("Admin");
 }
 
@@ -9,6 +23,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Hizmetler</h2>
 
+        @* Admin ise "Hizmet Ekle" butonu görünür *@
         @if (adminMi)
         {
             <a asp-action="Create" class="btn btn-primary">
@@ -36,6 +51,8 @@
                     <th>Süre (dk)</th>
                     <th>Ücret (₺)</th>
                     <th>Salon</th>
+
+                    @* Admin ise daha fazla işlem butonu olduğu için kolon genişliği artırılır *@
                     <th style="width:@(adminMi ? "190px" : "90px");">İşlemler</th>
                 </tr>
             </thead>
@@ -49,10 +66,12 @@
                         <td>@hizmet.SporSalonu?.SalonAdi</td>
                         <td>
                             <div class="btn-group" role="group">
+                                @* Her kullanıcı Detay sayfasını görebilir *@
                                 <a asp-action="Details" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-info">
                                     Detay
                                 </a>
 
+                                @* Admin ise Düzenle/Sil butonları eklenir *@
                                 @if (adminMi)
                                 {
                                     <a asp-action="Edit" asp-route-id="@hizmet.HizmetID" class="btn btn-sm btn-warning">

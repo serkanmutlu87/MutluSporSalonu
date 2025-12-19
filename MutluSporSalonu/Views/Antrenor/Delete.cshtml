@@ -1,12 +1,34 @@
-﻿@model MutluSporSalonu.Models.Antrenor
+﻿@*
+@file        Delete.cshtml
+@description Mutlu Spor Salonu uygulamasında antrenör silme onay ekranını sunan Razor View.
+             Silme işlemi yalnızca Admin rolüne sahip kullanıcılar tarafından tetiklenebilir.
+
+             Sağlanan özellikler:
+             - Kullanıcının Admin rolünde olup olmadığını kontrol eder.
+             - Admin değilse sayfa içinde yetkisiz erişim mesajı gösterir ve geri dönüş linki sunar.
+             - Admin ise, silinecek antrenörün özet bilgilerini ekranda gösterir.
+             - Silme işlemi için POST formu kullanır ve Anti-Forgery doğrulaması uygular.
+             - Antrenörün bağlı spor salonu bilgisi boş ise kullanıcıya okunabilir mesaj verir.
+             - Saat değerlerini hh:mm formatında ekrana basar.
+
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Antrenor
 
 @{
     ViewData["Title"] = "Antrenörü Sil";
+
+    // Giriş yapan kullanıcının Admin rolü kontrol edilir
     bool adminMi = User?.IsInRole("Admin") ?? false;
 }
 
 <div class="container mt-4">
 
+    @* Admin olmayan kullanıcılar için erişim kısıtı *@
     @if (!adminMi)
     {
         <div class="alert alert-danger">
@@ -20,10 +42,12 @@
     {
         <h2 class="mb-4 text-danger">Antrenörü Sil</h2>
 
+        @* İşlem geri alınamaz uyarısı *@
         <div class="alert alert-warning">
             <strong>Dikkat!</strong> Aşağıdaki antrenörü silmek üzeresiniz. Bu işlem geri alınamaz!
         </div>
 
+        @* Silinecek kaydın özet bilgileri *@
         <div class="card mb-3">
             <div class="card-body">
                 <h4 class="card-title">@Model.AntrenorAdSoyad</h4>
@@ -54,8 +78,11 @@
             </div>
         </div>
 
+        @* Silme işlemi POST ile yapılır, Anti-Forgery kullanılır *@
         <form asp-action="Delete" method="post">
             @Html.AntiForgeryToken()
+
+            @* Silinecek kaydı sunucuya doğru ID ile göndermek için *@
             <input type="hidden" asp-for="AntrenorID" />
 
             <div class="d-flex justify-content-between">

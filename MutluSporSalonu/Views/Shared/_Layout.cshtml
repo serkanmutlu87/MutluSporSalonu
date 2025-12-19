@@ -1,4 +1,14 @@
-﻿@{
+﻿@*
+@file        _Layout.cshtml
+@description Uygulamanın genel sayfa şablonudur (Layout).
+             Giriş yapılmışsa üst menü gösterilir; giriş yoksa sadece içerik render edilir.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@{
     var baslik = ViewData["Title"] as string ?? "Mutlu Spor Salonu";
     bool girisYapmis = User?.Identity?.IsAuthenticated ?? false;
 }

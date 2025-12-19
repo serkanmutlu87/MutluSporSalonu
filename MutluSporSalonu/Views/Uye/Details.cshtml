@@ -1,4 +1,16 @@
-﻿@model MutluSporSalonu.Models.Uye
+﻿@*
+@file        Details.cshtml
+@description Üye detay ekranıdır. Admin kullanıcılar tüm üyeleri görüntüleyebilir;
+             normal üyeler sadece kendi hesap bilgilerini ve kendilerine ait
+             randevuları görüntüleyebilir. Rol bazlı erişim Razor tarafında
+             ek güvenlik kontrolü ile sağlanır.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Uye
 @using System.Security.Claims
 
 @{

@@ -1,11 +1,32 @@
-﻿using System;
+﻿/**
+* @file        UyeController.cs
+* @description Mutlu Spor Salonu uygulamasında üye yönetimini yapan MVC controller.
+*              View döndürür.
+*
+*              Sağlanan işlevler:
+*              - Üye listesini sadece Admin rolüne açar.
+*              - Üye detay ekranında erişim kontrolü uygular:
+*                   Admin tüm üyeleri görüntüler, Üye sadece kendi kaydını görüntüler.
+*              - Üyelik kayıt (Create) işlemini giriş gerektirmeden çalıştırır.
+*              - Rol ve kayıt tarihi gibi kritik alanların istemci tarafından değiştirilmesini engeller,
+*                bu alanları sunucu tarafında belirler.
+*              - Üye düzenleme ve silme işlemlerinde rol bazlı kısıt uygular:
+*                   Admin tüm üyelerde işlem yapar, Üye sadece kendi kaydında işlem yapar.
+*              - Üye kendi hesabını sildiğinde oturumu sonlandırır (SignOut) ve ana sayfaya yönlendirir.
+*
+* @course      BSM 311 Web Programlama
+* @assignment  Dönem Projesi – MutluSporSalonu
+* @date        20.12.2025
+* @author      D255012008 - Serkan Mutlu
+*/
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MutluSporSalonu.Models;
 
-// ✅ eklediklerimiz
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
@@ -21,14 +42,22 @@ namespace MutluSporSalonu.Controllers
             _context = context;
         }
 
-        // ✅ Üye listesini normal üye görmesin (SADECE ADMIN)
+        // ------------------------------------------------------------
+        // GET: Uye
+        // Üye listesini görüntüler
+        // Sadece Admin rolüne izin verir
+        // ------------------------------------------------------------
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Uyeler.ToListAsync());
         }
 
-        // ✅ Detay: Admin her üyeyi görür, Üye sadece kendini görür
+        // ------------------------------------------------------------
+        // GET: Uye/Details/5
+        // Admin tüm üyeleri görüntüler
+        // Üye sadece kendi kaydını görüntüler, aksi durumda erişim engellenir
+        // ------------------------------------------------------------
         [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,8 +81,12 @@ namespace MutluSporSalonu.Controllers
             return View(uye);
         }
 
-
-        // ✅ Kayıt: herkes sisteme kayıt olabilir
+        // ------------------------------------------------------------
+        // GET: Uye/Create
+        // Üyelik kayıt ekranını açar
+        // Giriş gerektirmez
+        // Varsayılan rol ve kayıt tarihi değerini ekrana taşır
+        // ------------------------------------------------------------
         [AllowAnonymous]
         public IActionResult Create()
         {
@@ -65,13 +98,17 @@ namespace MutluSporSalonu.Controllers
             return View(model);
         }
 
-        // ✅ Kayıt: herkes sisteme kayıt olabilir
+        // ------------------------------------------------------------
+        // POST: Uye/Create
+        // Yeni kullanıcı kaydını veritabanına ekler
+        // Aynı e-posta ile kayıt olup olmadığını kontrol eder
+        // Rol ve kayıt tarihi alanlarını sunucu tarafında set eder
+        // ------------------------------------------------------------
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UyeID,UyeAdSoyad,UyeEposta,UyeSifre,UyeTelefon")] Uye uye)
         {
-            // eposta kontrol
             if (await _context.Uyeler.AnyAsync(u => u.UyeEposta == uye.UyeEposta))
             {
                 ModelState.AddModelError("UyeEposta", "Bu e-posta adresi ile zaten bir hesap bulunmaktadır.");
@@ -82,7 +119,7 @@ namespace MutluSporSalonu.Controllers
                 return View(uye);
             }
 
-            // ✅ güvenlik: rol ve kayıt tarihi server tarafında setlensin
+            // Kritik alanlar istemciden alınmaz, sunucuda belirlenir
             uye.Rol = "Uye";
             uye.KayitTarihi = DateTime.Now;
 
@@ -92,13 +129,21 @@ namespace MutluSporSalonu.Controllers
             return RedirectToAction(nameof(KayitBasarili));
         }
 
+        // ------------------------------------------------------------
+        // GET: Uye/KayitBasarili
+        // Kayıt tamamlandığında bilgilendirme ekranı gösterir
+        // ------------------------------------------------------------
         [AllowAnonymous]
         public IActionResult KayitBasarili()
         {
             return View();
         }
 
-        // ✅ Edit: Admin her üyeyi, Üye sadece kendini
+        // ------------------------------------------------------------
+        // GET: Uye/Edit/5
+        // Admin tüm üyelerde düzenleme yapabilir
+        // Üye sadece kendi kaydını düzenleyebilir
+        // ------------------------------------------------------------
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -116,8 +161,12 @@ namespace MutluSporSalonu.Controllers
             return View(uye);
         }
 
-        // ✅ Edit POST: Admin her üyeyi, Üye sadece kendini
-        // ✅ ayrıca Rol/KayitTarihi güvenli şekilde korunuyor
+        // ------------------------------------------------------------
+        // POST: Uye/Edit/5
+        // Admin tüm üyelerde güncelleme yapabilir
+        // Üye sadece kendi kaydını güncelleyebilir
+        // Rol/KayitTarihi gibi alanların istemciden değiştirilmesini engeller
+        // ------------------------------------------------------------
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -134,7 +183,7 @@ namespace MutluSporSalonu.Controllers
             if (!ModelState.IsValid)
                 return View(formUye);
 
-            // ✅ DB’den çek, sadece izinli alanları güncelle (rolü asla formdan alma)
+            // Güncelleme sadece izinli alanlarda yapılır (rol vb. alanlar korunur)
             var uyeDb = await _context.Uyeler.FindAsync(id);
             if (uyeDb == null) return NotFound();
 
@@ -153,14 +202,18 @@ namespace MutluSporSalonu.Controllers
                 throw;
             }
 
-            // Admin değilse kendi profil ekranına, admin ise listeye
+            // Üye rolünde işlem sonrası profil detayına döndürür, Admin rolünde listeye döndürür
             if (!User.IsInRole("Admin"))
                 return RedirectToAction(nameof(Details), new { id });
 
             return RedirectToAction(nameof(Index));
         }
 
-        // ✅ Delete: Admin her üyeyi, Üye sadece kendini
+        // ------------------------------------------------------------
+        // GET: Uye/Delete/5
+        // Admin tüm üyeleri silebilir
+        // Üye sadece kendi kaydını silebilir
+        // ------------------------------------------------------------
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -178,7 +231,12 @@ namespace MutluSporSalonu.Controllers
             return View(uye);
         }
 
-        // ✅ Delete POST: Admin her üyeyi, Üye sadece kendini
+        // ------------------------------------------------------------
+        // POST: Uye/Delete/5
+        // Admin tüm üyeleri silebilir
+        // Üye sadece kendi kaydını silebilir
+        // Üye kendi hesabını sildiğinde SignOut ile oturum kapatılır
+        // ------------------------------------------------------------
         [HttpPost, ActionName("Delete")]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -197,7 +255,6 @@ namespace MutluSporSalonu.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // ✅ üye kendi hesabını sildiyse çıkış yaptır
             if (!User.IsInRole("Admin"))
             {
                 await HttpContext.SignOutAsync();
@@ -207,6 +264,7 @@ namespace MutluSporSalonu.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Üye kaydının veritabanında var olup olmadığını kontrol eder
         private bool UyeExists(int id)
         {
             return _context.Uyeler.Any(e => e.UyeID == id);

@@ -1,4 +1,16 @@
-﻿@model MutluSporSalonu.Models.Randevu
+﻿@*
+@file        Edit.cshtml
+@description Randevu düzenleme ekranıdır.
+             Admin kullanıcılar tüm alanları (üye seçimi ve onay durumu dahil) düzenleyebilir.
+             Üye rolündeki kullanıcılar sadece kendi randevusunu düzenler; onay durumu sadece görüntülenir.
+             Salon/Antrenör/Hizmet seçimleri dependent dropdown endpointleri ile birbirini filtreler.
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Randevu
 
 @{
     ViewData["Title"] = "Randevu Düzenle";
@@ -12,6 +24,7 @@
 
         <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
+        @* Düzenlenecek randevunun ID'si form ile taşınır *@
         <input type="hidden" asp-for="RandevuID" />
 
         <div class="col-md-4">
@@ -76,7 +89,7 @@
 
             @if (User.IsInRole("Admin"))
             {
-                <!-- Admin: değiştirebilir -->
+                @* Admin: Onay durumunu değiştirebilir *@
                 <select asp-for="RandevuOnaylandiMi" class="form-select">
                     <option value="false">Beklemede</option>
                     <option value="true">Onaylandı</option>
@@ -84,19 +97,18 @@
             }
             else
             {
-                <!-- Normal Üye: sadece görür -->
+                @* Üye: Onay durumunu sadece görür (controller DB değerini korur) *@
                 <input type="text"
                        class="form-control"
                        value="@(Model.RandevuOnaylandiMi ? "Onaylandı" : "Beklemede")"
                        disabled />
 
-                <!-- model binding bozulmasın diye -->
+                @* Model binding bozulmasın diye hidden gönderilir *@
                 <input type="hidden" asp-for="RandevuOnaylandiMi" />
             }
 
             <span asp-validation-for="RandevuOnaylandiMi" class="text-danger"></span>
         </div>
-
 
         <div class="col-12">
             <label asp-for="RandevuAciklama" class="form-label"></label>
@@ -150,6 +162,7 @@
             const res = await fetch(`/Randevu/GetOptionsByAntrenor?antrenorId=${id}`);
             const data = await res.json();
 
+            // Antrenör seçilince: salon + hizmet listesi antrenöre göre filtrelenir
             fillSelect(salonSel, data.salons, "-- Salon Seçiniz --");
             fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
         }
@@ -161,6 +174,7 @@
             const res = await fetch(`/Randevu/GetOptionsBySalon?salonId=${id}`);
             const data = await res.json();
 
+            // Salon seçilince: antrenör + hizmet listesi salona göre filtrelenir
             fillSelect(antrenorSel, data.antrenorler, "-- Antrenör Seçiniz --");
             fillSelect(hizmetSel, data.services, "-- Hizmet Seçiniz --");
         }
@@ -169,7 +183,7 @@
         salonSel?.addEventListener("change", onSalonChanged);
 
         window.addEventListener("load", () => {
-            // Edit ekranında seçimler zaten dolu olacağı için otomatik uygula
+            // Edit ekranında seçimler doluysa ilgili filtrelemeyi sayfa açılışında uygula
             if (antrenorSel?.value) onAntrenorChanged();
             else if (salonSel?.value) onSalonChanged();
         });

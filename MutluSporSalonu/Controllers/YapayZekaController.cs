@@ -1,4 +1,25 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/**
+* @file        YapayZekaController.cs
+* @description Mutlu Spor Salonu uygulamasında yapay zekâ destekli öneri ekranını yöneten MVC controller.
+*              View döndürür.
+*
+*              Sağlanan işlevler:
+*              - Giriş yapmış kullanıcılar için öneri form ekranını açar.
+*              - Hedef alanı boş bırakıldığında doğrulama hatası üretir ve formu tekrar gösterir.
+*              - Giriş yapan kullanıcının ID bilgisini claim üzerinden alır.
+*              - Üye bilgilerini ve randevu geçmişini (Hizmet + Antrenör dahil) veritabanından çeker.
+*              - Randevu geçmişini özetleyip yapay zekâ servisine prompt olarak hazırlar.
+*              - Sistem mesajı + kullanıcı mesajı formatında yapay zekâ servisini çağırır.
+*              - Üretilen öneri metnini ViewBag ile ekrana taşır.
+*              - Form alanlarını (hedef / ekNot) geri basarak kullanıcı deneyimini korur.
+*
+* @course      BSM 311 Web Programlama
+* @assignment  Dönem Projesi – MutluSporSalonu
+* @date        20.12.2025
+* @author      D255012008 - Serkan Mutlu
+*/
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MutluSporSalonu.Models;
@@ -8,7 +29,7 @@ using System.Text;
 
 namespace MutluSporSalonu.Controllers
 {
-    [Authorize]
+    [Authorize] // Giriş yapılmadan öneri ekranına erişimi engeller
     public class YapayZekaController : Controller
     {
         private readonly IYapayZekaServisi _yz;
@@ -20,28 +41,36 @@ namespace MutluSporSalonu.Controllers
             _context = context;
         }
 
+        // ------------------------------------------------------------
+        // GET: YapayZeka/Oneri
+        // Öneri form ekranını açar (model kullanılmaz)
+        // ------------------------------------------------------------
         [HttpGet]
         public IActionResult Oneri()
         {
-            // Sadece form ekranını açıyoruz (model yok)
+            // Form ekranını görüntüler
             return View();
         }
 
+        // ------------------------------------------------------------
+        // POST: YapayZeka/Oneri
+        // Kullanıcının hedef ve not bilgisine göre kişiselleştirilmiş öneri metni üretir
+        // ------------------------------------------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Oneri(string hedef, string? ekNot)
         {
-            // Basit doğrulama (model yoksa bunu sen yapacaksın)
+            // Hedef alanı boşsa hata mesajı üretir ve aynı ekranı tekrar gösterir
             if (string.IsNullOrWhiteSpace(hedef))
             {
                 ViewBag.Hata = "Hedef alanı zorunludur.";
                 return View();
             }
 
-            // Giriş yapan kullanıcı ID
+            // Giriş yapan kullanıcı ID bilgisini claim üzerinden okur
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            // ✅ Üyeyi + randevularını çek (Hizmet ve Antrenor ile birlikte)
+            // Üyeyi ve randevularını Hizmet + Antrenör bilgileriyle birlikte getirir
             var uye = await _context.Uyeler
                 .Include(u => u.Randevular)
                     .ThenInclude(r => r.Hizmet)
@@ -52,7 +81,7 @@ namespace MutluSporSalonu.Controllers
             if (uye == null)
                 return NotFound();
 
-            // Prompt için geçmiş antrenman/hizmet geçmişi özeti
+            // Yapay zekâya gidecek metin için özet prompt oluşturur
             var sb = new StringBuilder();
 
             sb.AppendLine($"Üye Ad Soyad: {uye.UyeAdSoyad}");
@@ -68,7 +97,7 @@ namespace MutluSporSalonu.Controllers
             }
             else
             {
-                // En son 10 randevu yeterli (prompt şişmesin)
+                // Prompt metni gereksiz büyümesin diye en son 10 randevu ile sınırlar
                 var sonRandevular = uye.Randevular
                     .OrderByDescending(r => r.RandevuTarihi)
                     .Take(10)
@@ -87,6 +116,7 @@ namespace MutluSporSalonu.Controllers
             sb.AppendLine($"Hedef: {hedef}");
             sb.AppendLine($"Ek Not: {(string.IsNullOrWhiteSpace(ekNot) ? "Yok" : ekNot)}");
 
+            // Sistem mesajı: çıktının kapsamını, formatını ve güvenlik sınırlarını belirler
             string sistem =
                 "Sen profesyonel bir spor koçu ve diyetisyensin. " +
                 "Üyenin hedefi, notları ve randevu geçmişine göre kişiselleştirilmiş öneri oluştur. " +
@@ -95,11 +125,13 @@ namespace MutluSporSalonu.Controllers
                 "(3) Örnek 1 günlük beslenme planı (4) Genel kurallar (5) Güvenlik uyarıları. " +
                 "Tıbbi teşhis koyma; riskli durumlarda doktora danış uyarısı ekle.";
 
+            // Kullanıcı mesajı: üyeye ait özet bilgiler + hedef + notlar içerir
             string kullanici = sb.ToString();
 
+            // Yapay zekâ servisini çağırır ve dönen metni ekrana taşır
             ViewBag.OneriMetni = await _yz.MetinOlustur(sistem, kullanici);
 
-            // Form değerlerini geri basmak istersen:
+            // Form değerlerini tekrar ekrana basar
             ViewBag.Hedef = hedef;
             ViewBag.EkNot = ekNot;
 

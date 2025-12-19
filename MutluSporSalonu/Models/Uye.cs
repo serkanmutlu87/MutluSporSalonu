@@ -1,12 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/**
+* @file        Uye.cs
+* @description Mutlu Spor Salonu uygulamasında üye (kullanıcı) varlığını temsil eden model sınıfı.
+*              Entity Framework Core ile veritabanı tablolaşmasını sağlar.
+*
+*              Sağlanan özellikler:
+*              - Üyeye ait kimlik, iletişim ve giriş bilgilerini tutar.
+*              - E-posta ve şifre alanları için doğrulama kurallarını tanımlar.
+*              - Kullanıcı rolünü (Admin / Uye) veri katmanında saklar.
+*              - Üyeye ait randevu kayıtları ile olan ilişkiyi belirtir.
+*              - DataAnnotations kullanılarak doğrulama ve ekran etiketleri belirlenir.
+*
+* @course      BSM 311 Web Programlama
+* @assignment  Dönem Projesi – MutluSporSalonu
+* @date        20.12.2025
+* @author      D255012008 - Serkan Mutlu
+*/
+
+using System.ComponentModel.DataAnnotations;
 
 namespace MutluSporSalonu.Models
 {
     public class Uye
     {
+        // ------------------------------------------------------------
+        // Birincil anahtar
+        // ------------------------------------------------------------
         [Key]
         public int UyeID { get; set; }
 
+        // ------------------------------------------------------------
+        // Temel üye bilgileri
+        // ------------------------------------------------------------
         [Required(ErrorMessage = "Ad soyad zorunludur.")]
         [StringLength(100)]
         [Display(Name = "Ad Soyad")]
@@ -27,6 +51,9 @@ namespace MutluSporSalonu.Models
         [StringLength(20)]
         public string? UyeTelefon { get; set; }
 
+        // ------------------------------------------------------------
+        // Sistem alanları
+        // ------------------------------------------------------------
         [Display(Name = "Kayıt Tarihi")]
         public DateTime KayitTarihi { get; set; } = DateTime.Now;
 
@@ -34,9 +61,13 @@ namespace MutluSporSalonu.Models
         [StringLength(20)]
         [Display(Name = "Rol")]
         public string Rol { get; set; } = "Uye";
-        // "Admin" / "Uye"
+        // Olası değerler: "Admin", "Uye"
 
+        // ------------------------------------------------------------
         // İlişkiler
+        // ------------------------------------------------------------
+
+        // Üyeye ait randevu kayıtlarını temsil eder
         [Display(Name = "Randevular")]
         public ICollection<Randevu>? Randevular { get; set; }
     }

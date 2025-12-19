@@ -1,4 +1,15 @@
-﻿@model MutluSporSalonu.Models.Randevu
+﻿@*
+@file        Delete.cshtml
+@description Randevu silme onay ekranıdır.
+             Kullanıcıya silinecek randevunun özet bilgileri gösterilir ve POST ile Delete action’ına gönderilerek silme işlemi tamamlanır.
+             Yetkilendirme/owner kontrolü controller tarafında yapılır (Admin tümünü, Üye sadece kendi randevusunu silebilir).
+@course      BSM 311 Web Programlama
+@assignment  Dönem Projesi – MutluSporSalonu
+@date        20.12.2025
+@author      D255012008 - Serkan Mutlu
+*@
+
+@model MutluSporSalonu.Models.Randevu
 
 @{
     ViewData["Title"] = "Randevuyu Sil";
@@ -49,6 +60,7 @@
     </div>
 
     <form asp-action="Delete" method="post">
+        @* Silme işlemi POST ile yapılır; id gizli alanla gönderilir *@
         <input type="hidden" asp-for="RandevuID" />
 
         <div class="d-flex justify-content-between">
