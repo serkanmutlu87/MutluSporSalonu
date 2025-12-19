@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MutluSporSalonu.Models;
+using MutluSporSalonu.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Gemini servisin varsa:
+builder.Services.AddScoped<IYapayZekaServisi, GeminiYapayZekaServisi>();
 
 builder.Services.AddDbContext<DBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))

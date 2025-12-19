@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Yapay Zekâ Egzersiz & Diyet Önerisi";
+
+    string? oneri = ViewBag.OneriMetni as string;
+    string? hedef = ViewBag.Hedef as string;
+    string? ekNot = ViewBag.EkNot as string;
+    string? hata = ViewBag.Hata as string;
+}
+
+<div class="container mt-4">
+
+    <!-- Başlık -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="h4">Yapay Zekâ Destekli Egzersiz ve Diyet Önerisi</h2>
+            <p class="text-muted">
+                Hedefini ve varsa ek notunu gir. Sistem, randevu geçmişini ve
+                üyelik bilgilerini dikkate alarak sana özel bir öneri oluştursun.
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- FORM -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Bilgilerini Gir
+                </div>
+                <div class="card-body">
+
+                    @if (!string.IsNullOrWhiteSpace(hata))
+                    {
+                        <div class="alert alert-danger">
+                            @hata
+                        </div>
+                    }
+
+                    <form asp-action="Oneri" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label class="form-label">Hedefiniz</label>
+                            <select name="hedef" class="form-select" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Kilo Verme" selected="@(hedef == "Kilo Verme")">
+                                    Kilo Verme
+                                </option>
+                                <option value="Kas Kazanma" selected="@(hedef == "Kas Kazanma")">
+                                    Kas Kazanma
+                                </option>
+                                <option value="Kondisyon Artırma" selected="@(hedef == "Kondisyon Artırma")">
+                                    Kondisyon / Dayanıklılık Artırma
+                                </option>
+                                <option value="Genel Sağlık ve Form" selected="@(hedef == "Genel Sağlık ve Form")">
+                                    Genel Sağlık ve Form
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ek Bilgi / Not (opsiyonel)</label>
+                            <textarea name="ekNot"
+                                      rows="3"
+                                      class="form-control"
+                                      placeholder="Örn: Diz ağrım var, ağır kardiyo istemiyorum.">@ekNot</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" id="btnYzGonder">
+                            Yapay Zekâdan Öneri Al
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SONUÇ -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white d-flex align-items-center">
+                    <span>Öneri Sonucu</span>
+                    <div class="ms-auto small" id="yzDurum"></div>
+                </div>
+                <div class="card-body">
+
+                    @if (!string.IsNullOrWhiteSpace(oneri))
+                    {
+                        <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;">
+    @oneri
+                            </pre>
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            Henüz bir öneri oluşturulmadı. Soldaki formu doldurup
+                            <strong>“Yapay Zekâdan Öneri Al”</strong> butonuna tıklayın.
+                        </p>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const btn = document.getElementById("btnYzGonder");
+        const durum = document.getElementById("yzDurum");
+
+        if (btn && durum) {
+            btn.addEventListener("click", function () {
+                durum.innerText = "Yapay zekâdan yanıt bekleniyor...";
+            });
+        }
+    </script>
+}
